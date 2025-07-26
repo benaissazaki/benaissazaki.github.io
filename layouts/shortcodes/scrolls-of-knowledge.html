@@ -1,0 +1,126 @@
+<div class="scrolls-library">
+    <div class="library-header">
+        <h2 class="library-title">📜 SCROLLS OF KNOWLEDGE 📜</h2>
+        <p class="library-subtitle">*Ancient wisdom from the coding realm*</p>
+    </div>
+
+    <div class="scrolls-collection">
+        <div class="scroll-item" data-rarity="legendary">
+            <div class="scroll-seal">🚀</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/wordpress-speed-checklist/">Wordpress Speed Checklist</a>
+                </div>
+                <div class="scroll-rarity">Legendary Scroll</div>
+                <div class="scroll-date">Scribed on 2024-03-05</div>
+                <div class="scroll-preview">Ancient techniques to accelerate WordPress realms beyond mortal comprehension...</div>
+            </div>
+        </div>
+
+        <div class="scroll-item" data-rarity="epic">
+            <div class="scroll-seal">🍡</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/django-from-beginner-to-intermediate/">6 Django Tips to go From Beginner to Intermediate</a>
+                </div>
+                <div class="scroll-rarity">Epic Scroll</div>
+                <div class="scroll-date">Scribed on 2024-02-02</div>
+                <div class="scroll-preview">Sacred knowledge to ascend from novice to intermediate Django mastery...</div>
+            </div>
+        </div>
+
+        <div class="scroll-item" data-rarity="rare">
+            <div class="scroll-seal">☑️</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/wordpress-security-checklist/">WordPress Security Checklist</a>
+                </div>
+                <div class="scroll-rarity">Rare Scroll</div>
+                <div class="scroll-date">Scribed on 2024-01-14</div>
+                <div class="scroll-preview">Protective wards and enchantments to shield WordPress domains from dark forces...</div>
+            </div>
+        </div>
+
+        <div class="scroll-item" data-rarity="epic">
+            <div class="scroll-seal">🔒</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/security-strategies-for-your-wordpress-website/">Security Strategies for your Wordpress Website</a>
+                </div>
+                <div class="scroll-rarity">Epic Scroll</div>
+                <div class="scroll-date">Scribed on 2023-08-26</div>
+                <div class="scroll-preview">Advanced battle tactics for defending your digital fortress from invaders...</div>
+            </div>
+        </div>
+
+        <div class="scroll-item" data-rarity="uncommon">
+            <div class="scroll-seal">📽️</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/a-better-way-to-watch-movies-on-tv/">A Better Way to Watch Movies on TV</a>
+                </div>
+                <div class="scroll-rarity">Uncommon Scroll</div>
+                <div class="scroll-date">Scribed on 2023-06-18</div>
+                <div class="scroll-preview">Mystical arts of entertainment streaming and media server mastery...</div>
+            </div>
+        </div>
+
+        <div class="scroll-item" data-rarity="legendary">
+            <div class="scroll-seal">💉</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/hacking-my-childhood-game-dll-injection/">Hacking my Childhood Game: DLL Injection</a>
+                </div>
+                <div class="scroll-rarity">Legendary Scroll</div>
+                <div class="scroll-date">Scribed on 2023-04-26</div>
+                <div class="scroll-preview">Forbidden magic of memory manipulation and code injection sorcery...</div>
+            </div>
+        </div>
+
+        <div class="scroll-item" data-rarity="epic">
+            <div class="scroll-seal">🕹️</div>
+            <div class="scroll-content">
+                <div class="scroll-title">
+                    <a href="/blog/hacking-my-childhood-game/">Hacking my Childhood Game</a>
+                </div>
+                <div class="scroll-rarity">Epic Scroll</div>
+                <div class="scroll-date">Scribed on 2023-04-16</div>
+                <div class="scroll-preview">The beginning of a legendary quest into reverse engineering and game hacking...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="library-footer">
+        <p class="wisdom-quote">*"Knowledge shared is power multiplied"* - Ancient Developer Proverb</p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollItems = document.querySelectorAll('.scroll-item');
+    
+    scrollItems.forEach((scroll, index) => {
+        // Add staggered entrance animation
+        scroll.style.animationDelay = `${index * 0.1}s`;
+        
+        scroll.addEventListener('mouseenter', function() {
+            this.classList.add('scroll-hover');
+            // Add floating animation
+            this.style.transform = 'translateY(-5px) rotate(1deg)';
+        });
+        
+        scroll.addEventListener('mouseleave', function() {
+            this.classList.remove('scroll-hover');
+            this.style.transform = 'translateY(0) rotate(0deg)';
+        });
+        
+        // Add click effect
+        scroll.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'A') {
+                const link = this.querySelector('a');
+                if (link) link.click();
+            }
+        });
+    });
+});
+</script>

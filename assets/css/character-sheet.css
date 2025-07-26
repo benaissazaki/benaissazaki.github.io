@@ -1,0 +1,312 @@
+/* RPG Character Sheet */
+.character-sheet {
+    background: linear-gradient(135deg, #2c1810 0%, #1a0f08 100%);
+    border: 3px solid #8b6914;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    font-family: 'Courier New', monospace;
+    color: #f4e4bc;
+    box-shadow: 
+        0 0 20px rgba(139, 105, 20, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.character-sheet::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #8b6914, #d4af37, #8b6914, #d4af37);
+    border-radius: 12px;
+    z-index: -1;
+    animation: border-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes border-glow {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.character-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.character-portrait {
+    flex-shrink: 0;
+}
+
+.portrait-frame {
+    width: 100px;
+    height: 100px;
+    border: 3px solid #d4af37;
+    border-radius: 8px;
+    background: radial-gradient(circle, #4a3728, #2c1810);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.avatar {
+    font-size: 3rem;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+}
+
+.character-info {
+    flex: 1;
+}
+
+.character-name {
+    font-size: 2rem;
+    color: #d4af37;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    letter-spacing: 1px;
+}
+
+.character-class {
+    font-size: 1.1rem;
+    color: #9acd32;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+}
+
+.character-origin, .character-exp {
+    font-size: 0.9rem;
+    color: #ddd;
+    margin-bottom: 0.2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stat-block, .equipment-section, .quests-section {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #8b6914;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-category, .equipment-category, .quest-category {
+    font-size: 1rem;
+    color: #d4af37;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #8b6914;
+    padding-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.stat-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    gap: 1rem;
+}
+
+.stat-name {
+    min-width: 120px;
+    font-size: 0.8rem;
+    color: #f4e4bc;
+}
+
+.stat-bar {
+    flex: 1;
+    height: 12px;
+    background: #2c1810;
+    border: 1px solid #8b6914;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #00ff44 100%);
+    border-radius: 5px;
+    transition: width 1.5s ease-out;
+    width: 0%;
+}
+
+.stat-fill.animate {
+    width: var(--target-width, 0%) !important;
+}
+
+.stat-value {
+    min-width: 30px;
+    text-align: right;
+    font-size: 0.8rem;
+    color: #d4af37;
+    font-weight: bold;
+}
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    gap: 1rem;
+}
+
+.skill-icon {
+    font-size: 1.5rem;
+    width: 30px;
+    text-align: center;
+}
+
+.skill-name {
+    flex: 1;
+    font-size: 0.9rem;
+    color: #f4e4bc;
+}
+
+.skill-level {
+    font-size: 0.8rem;
+    color: #9acd32;
+    font-weight: bold;
+    padding: 0.2rem 0.5rem;
+    background: rgba(154, 205, 50, 0.2);
+    border-radius: 4px;
+    border: 1px solid #9acd32;
+}
+
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.equipment-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid #8b6914;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.equipment-slot:hover, .equipment-slot.hover-glow {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+}
+
+.equipment-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.equipment-name {
+    font-size: 0.8rem;
+    color: #f4e4bc;
+    text-align: center;
+}
+
+.quest-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border-left: 3px solid #9acd32;
+}
+
+.quest-item.active {
+    animation: quest-pulse 2s ease-in-out infinite;
+}
+
+@keyframes quest-pulse {
+    0%, 100% { border-left-color: #9acd32; }
+    50% { border-left-color: #d4af37; }
+}
+
+.quest-icon {
+    font-size: 1.2rem;
+    width: 25px;
+    text-align: center;
+}
+
+.quest-text {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #f4e4bc;
+}
+
+.character-description {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #8b6914;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.description-title {
+    font-size: 1rem;
+    color: #d4af37;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #8b6914;
+    padding-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.character-description p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #f4e4bc;
+    margin: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .character-sheet {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .character-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .character-name {
+        font-size: 1.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .equipment-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-line {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .stat-name {
+        min-width: 100px;
+    }
+}

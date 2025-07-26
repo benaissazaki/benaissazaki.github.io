@@ -1,0 +1,144 @@
+<div class="character-sheet">
+    <div class="character-header">
+        <div class="character-portrait">
+            <div class="portrait-frame">
+                <div class="avatar">🧑‍💻</div>
+            </div>
+        </div>
+        <div class="character-info">
+            <h1 class="character-name">ZAKI BENAISSA</h1>
+            <div class="character-class">Level 3 Software Engineer</div>
+            <div class="character-origin">Origin: Algeria 🇩🇿</div>
+            <div class="character-exp">EXP: 4 Years + Master's Degree</div>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-block">
+            <div class="stat-category">CORE STATS</div>
+            <div class="stat-line">
+                <span class="stat-name">Problem Solving</span>
+                <span class="stat-bar">
+                    <span class="stat-fill" style="width: 95%"></span>
+                </span>
+                <span class="stat-value">95</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-name">Code Quality</span>
+                <span class="stat-bar">
+                    <span class="stat-fill" style="width: 88%"></span>
+                </span>
+                <span class="stat-value">88</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-name">Learning Speed</span>
+                <span class="stat-bar">
+                    <span class="stat-fill" style="width: 92%"></span>
+                </span>
+                <span class="stat-value">92</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-name">Bug Hunting</span>
+                <span class="stat-bar">
+                    <span class="stat-fill" style="width: 85%"></span>
+                </span>
+                <span class="stat-value">85</span>
+            </div>
+        </div>
+
+        <div class="stat-block">
+            <div class="stat-category">SPECIALIZATIONS</div>
+            <div class="skill-item">
+                <span class="skill-icon">🕸️</span>
+                <span class="skill-name">Web Development</span>
+                <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+                <span class="skill-icon">⚡</span>
+                <span class="skill-name">WordPress Magic</span>
+                <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-item">
+                <span class="skill-icon">📱</span>
+                <span class="skill-name">Mobile Apps</span>
+                <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-item">
+                <span class="skill-icon">🛠️</span>
+                <span class="skill-name">Custom Tools</span>
+                <span class="skill-level">Expert</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="equipment-section">
+        <div class="equipment-category">EQUIPPED LANGUAGES</div>
+        <div class="equipment-grid">
+            <div class="equipment-slot" data-item="python">
+                <span class="equipment-icon">🐍</span>
+                <span class="equipment-name">Python</span>
+            </div>
+            <div class="equipment-slot" data-item="javascript">
+                <span class="equipment-icon">⚡</span>
+                <span class="equipment-name">JavaScript</span>
+            </div>
+            <div class="equipment-slot" data-item="php">
+                <span class="equipment-icon">🔧</span>
+                <span class="equipment-name">PHP</span>
+            </div>
+            <div class="equipment-slot" data-item="rust">
+                <span class="equipment-icon">⚙️</span>
+                <span class="equipment-name">Rust</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="quests-section">
+        <div class="quest-category">CURRENT QUESTS</div>
+        <div class="quest-item active">
+            <span class="quest-icon">💼</span>
+            <span class="quest-text">Working at Webdispo - Managing WordPress realms</span>
+        </div>
+        <div class="quest-item active">
+            <span class="quest-icon">📝</span>
+            <span class="quest-text">Writing Blog Posts - Sharing knowledge with the world (or the 2 persons reading them)</span>
+        </div>
+        <div class="quest-item active">
+            <span class="quest-icon">🚀</span>
+            <span class="quest-text">Open Source Contributions - Helping the community</span>
+        </div>
+    </div>
+
+    <div class="character-description">
+        <div class="description-title">CHARACTER BIO</div>
+        <p>A passionate Software Engineer from Algeria who loves exploring the vast world of programming. 
+        Specialized in web development, mobile apps, and custom solutions. Always ready for new adventures 
+        in code, whether it's desktop apps, web platforms, mobile applications, or even microcontroller magic!</p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add some interactive effects
+    const equipmentSlots = document.querySelectorAll('.equipment-slot');
+    const questItems = document.querySelectorAll('.quest-item');
+    
+    equipmentSlots.forEach(slot => {
+        slot.addEventListener('mouseenter', function() {
+            this.classList.add('hover-glow');
+        });
+        
+        slot.addEventListener('mouseleave', function() {
+            this.classList.remove('hover-glow');
+        });
+    });
+    
+    // Animate stat bars on load
+    setTimeout(() => {
+        const statFills = document.querySelectorAll('.stat-fill');
+        statFills.forEach(fill => {
+            fill.classList.add('animate');
+        });
+    }, 500);
+});
+</script>

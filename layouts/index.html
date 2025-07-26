@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{ $style := resources.Get "css/style.css" | resources.Minify }}
     <link rel="stylesheet" href="{{ $style.Permalink }}">
+    {{ $character_style := resources.Get "css/character-sheet.css" | resources.Minify }}
+    <link rel="stylesheet" href="{{ $character_style.Permalink }}">
+    {{ $scrolls_style := resources.Get "css/scrolls-of-knowledge.css" | resources.Minify }}
+    <link rel="stylesheet" href="{{ $scrolls_style.Permalink }}">
+    {{ $guild_style := resources.Get "css/guild-recruitment-board.css" | resources.Minify }}
+    <link rel="stylesheet" href="{{ $guild_style.Permalink }}">
     <link rel="canonical" href="https://benaissazaki.com/">
     <meta name="description" content="{{ .Description }}">
     <meta name="og:type" content="website">

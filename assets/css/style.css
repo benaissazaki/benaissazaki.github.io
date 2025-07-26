@@ -24,11 +24,9 @@ body {
 }
 
 main {
-    background-color: var(--main-background-color);
     max-width: 800px;
     margin: 0 auto;
     padding: 25px;
-    border: solid 10px var(--primary-color);
 }
 
 h1,

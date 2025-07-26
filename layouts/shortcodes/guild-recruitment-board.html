@@ -1,0 +1,123 @@
+<div class="guild-board">
+    <div class="board-header">
+        <div class="board-title">
+            <span class="guild-icon">⚔️</span>
+            GUILD RECRUITMENT BOARD
+            <span class="guild-icon">🛡️</span>
+        </div>
+        <div class="board-subtitle">Developer profile and connections</div>
+    </div>
+
+    <div class="recruitment-post">
+        <div class="post-header">
+            <div class="player-info">
+                <div class="player-avatar">🧑‍💻</div>
+                <div class="player-details">
+                    <div class="player-name">Zaki Benaissa</div>
+                    <div class="player-class">Level 3 Software Engineer</div>
+                    <div class="player-location">📍 Algeria</div>
+                </div>
+            </div>
+            <div class="post-status">
+                <span class="status-indicator active"></span>
+                <span class="status-text">ONLINE</span>
+            </div>
+        </div>
+
+        <div class="post-content">
+            <div class="guild-description">
+                <h3>🎮 DEVELOPER PROFILE</h3>
+                <p>Software engineer from Algeria who enjoys building cool stuff. Whether it's web apps, mobile development, or custom solutions - always happy to chat about code and share knowledge with fellow developers!</p>
+                
+                <div class="guild-benefits">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">⚡</span>
+                        <span>Fast response times</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🛠️</span>
+                        <span>Quality craftsmanship</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🤝</span>
+                        <span>Collaborative approach</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🎯</span>
+                        <span>Project-focused</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="communication-channels">
+            <div class="channels-title">📡 COMMUNICATION CHANNELS</div>
+            <div class="channels-grid">
+                <a href="https://github.com/benaissazaki" class="channel-button github" target="_blank" rel="noopener">
+                    <div class="channel-icon">
+                        <img src="https://raw.githubusercontent.com/gauravghongde/social-icons/master/SVG/Color/Github.svg" alt="Github">
+                    </div>
+                    <div class="channel-info">
+                        <div class="channel-name">GitHub</div>
+                        <div class="channel-desc">Code Repository</div>
+                        <div class="channel-status">🟢 Active</div>
+                    </div>
+                </a>
+
+                <a href="https://www.linkedin.com/in/zaki-benaissa/" class="channel-button linkedin" target="_blank" rel="noopener">
+                    <div class="channel-icon">
+                        <img src="https://raw.githubusercontent.com/gauravghongde/social-icons/master/SVG/Color/LinkedIN.svg" alt="LinkedIn">
+                    </div>
+                    <div class="channel-info">
+                        <div class="channel-name">LinkedIn</div>
+                        <div class="channel-desc">Professional Guild</div>
+                        <div class="channel-status">🟢 Active</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="post-footer">
+            <div class="post-meta">
+                <span>📅 Last seen: Recently active</span>
+                <span>💬 Status: Open to chat</span>
+                <span>🌍 Timezone: CET (Algeria)</span>
+            </div>
+            <div class="call-to-action">
+                <button class="join-button">
+                    <span class="button-text">SAY HELLO</span>
+                    <span class="button-icon">👋</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const channelButtons = document.querySelectorAll('.channel-button');
+    const joinButton = document.querySelector('.join-button');
+    
+    channelButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.classList.add('channel-hover');
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.classList.remove('channel-hover');
+        });
+    });
+    
+    joinButton.addEventListener('click', function() {
+        // Could open a contact form or mailto link
+        const message = "Ready to start a new adventure? Let's connect and build something amazing together!";
+        alert(message);
+    });
+    
+    // Animate status indicator
+    const statusIndicator = document.querySelector('.status-indicator');
+    setInterval(() => {
+        statusIndicator.classList.toggle('pulse');
+    }, 2000);
+});
+</script>
