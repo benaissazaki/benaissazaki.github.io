@@ -92,3 +92,102 @@ ul.checklist li input[type="checkbox"] {
     width: 20px;
     height: 20px;
 }
+
+/* Human Status Widget */
+.human-status {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    color: #00ff41;
+    font-size: 0.8rem;
+    min-width: 180px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    z-index: 1000;
+    animation: pulse-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); }
+    100% { box-shadow: 0 0 30px rgba(0, 255, 65, 0.5); }
+}
+
+.status-header {
+    border-bottom: 1px solid #00ff41;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.status-label {
+    font-weight: bold;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.status-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.status-icon {
+    font-size: 1.5rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-3px); }
+    60% { transform: translateY(-2px); }
+}
+
+.status-text {
+    flex: 1;
+}
+
+.status-text span {
+    display: block;
+    font-weight: bold;
+}
+
+.status-time {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.status-bar {
+    background: #333;
+    border: 1px solid #00ff41;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.status-bar-fill {
+    background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #00ff41 100%);
+    height: 100%;
+    transition: width 0.5s ease;
+    border-radius: 2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .human-status {
+        bottom: 10px;
+        left: 10px;
+        min-width: 160px;
+        font-size: 0.7rem;
+        padding: 10px;
+    }
+    
+    .status-icon {
+        font-size: 1.2rem;
+    }
+}
