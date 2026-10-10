@@ -1,0 +1,22 @@
+<div class="counter" id="visitor-counter" hidden data-endpoint="{{ site.Params.counter }}">
+    <span class="counter__digits" aria-live="polite"></span>
+    <span class="counter__label">visitors since forever</span>
+</div>
+<script>
+(function () {
+    const el = document.getElementById('visitor-counter');
+    const box = el.closest('.box');
+    if (box) box.hidden = true;
+    fetch(el.dataset.endpoint)
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (data) {
+            const n = Number(data.count ?? data.value);
+            if (!Number.isFinite(n)) return;
+            el.querySelector('.counter__digits').innerHTML = String(Math.floor(n)).padStart(6, '0')
+                .split('').map(function (d) { return '<span>' + d + '</span>'; }).join('');
+            el.hidden = false;
+            if (box) box.hidden = false;
+        })
+        .catch(function () { /* stay hidden: never show a fake number */ });
+})();
+</script>

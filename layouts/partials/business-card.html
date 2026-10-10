@@ -1,12 +1,17 @@
-{{ $card_style := resources.Get "css/business-card.css" | resources.Minify }}
-<link rel="stylesheet" href="{{ $card_style.Permalink }}">
-
-<div class="business-card">
-    <span class="website">benaissazaki.com</span>
-    <span class="email">contact@benaissazaki.com</span>
-    <img src="/img/logo-wd.webp" alt="Webdispo" class="company">
-    <div>
-        <span>Zaki BENAISSA</span><br>
-        <sub>Software Engineer</sub>
+<div class="business-card" tabindex="0" aria-label="Business card: Zaki Benaissa, freelance software engineer, {{ site.Params.email }}">
+    <div class="business-card__inner">
+        <div class="business-card__face business-card__front">
+            <span class="business-card__status">● available for work</span>
+            <div>
+                <span class="business-card__name">Zaki BENAISSA</span>
+                <span class="business-card__role">Freelance Software Engineer</span>
+            </div>
+            <span class="business-card__site">benaissazaki.com</span>
+        </div>
+        <div class="business-card__face business-card__back" aria-hidden="true">
+            <span class="business-card__name">let's build something</span>
+            <span>web apps · WordPress · Django · Laravel · Rust · Flutter</span>
+            <a href="mailto:{{ site.Params.email }}" tabindex="-1">{{ site.Params.email }}</a>
+        </div>
     </div>
 </div>

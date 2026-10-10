@@ -1,41 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{{ define "head" }}
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "WebSite",
+      "name": "Benaissa Zaki",
+      "url": "https://benaissazaki.com/"
+    }
+</script>
+{{ end }}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{ $style := resources.Get "css/style.css" | resources.Minify }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
-    <link rel="canonical" href="https://benaissazaki.com/">
-    <meta name="description" content="{{ .Description }}">
-    <meta name="og:type" content="website">
-    <meta name="og:locale" content="en_GB">
-    <meta name="og:title" content="{{ .Title }}">
-    <meta name="og:description" content="{{ .Description }}">
-    <meta name="twitter:title" content="{{ .Title }}">
-    <meta name="twitter:description" content="{{ .Description }}">
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org/",
-          "@type": "WebSite",
-          "name": "Benaissa Zaki",
-          "url": "https://benaissazaki.com/",
-        }
-    </script>
-    <title>{{ .Title }}</title>
-</head>
-
-<body>
-    <main>
-        {{ .Content }}
-    </main>
-    <footer>
-        <div id="credits">
-            Made with 🗿 by <strong>Zaki Benaissa</strong>
-        </div>
-    </footer>
-    
-    {{ partial "human-status.html" . }}
-</body>
-
-</html>
+{{ define "main" }}
+<div class="home">
+    {{ .Content }}
+</div>
+{{ end }}

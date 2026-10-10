@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{ $style := resources.Get "css/style.css" | resources.Minify }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
-    <script async src="https://eu.umami.is/script.js" data-website-id="633a36dd-0095-4d62-aad4-dbc32db9f386"></script>
-    <title>{{ .Title }}</title>
-</head>
-
-<body>
-    <main>
-        {{ .Content }}
-    </main>
-    <footer>
-        <div id="credits">
-            Made with 🗿 by <strong>Zaki Benaissa</strong>
-        </div>
-    </footer>
-    
-    {{ partial "human-status.html" . }}
-</body>
-
-</html>
+{{ define "main" }}
+<article class="page-content">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.updated }}<p class="page-content__meta">last updated <time datetime="{{ . }}">{{ . }}</time></p>{{ end }}
+    {{ .Content }}
+</article>
+{{ end }}

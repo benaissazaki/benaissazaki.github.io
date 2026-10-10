@@ -1,0 +1,47 @@
+<div class="konami-toast" id="konami-toast" role="status" aria-live="polite" hidden>
+    <strong>COMMAND POINT LIMIT REMOVED</strong>
+    <span>you may now recruit unlimited Uruk-hai. (a nod to <a href="/blog/hacking-my-childhood-game/">this post</a>)</span>
+</div>
+<script>
+(function () {
+    const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let pos = 0;
+
+    document.addEventListener('keydown', function (e) {
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        pos = key === code[pos] ? pos + 1 : (key === code[0] ? 1 : 0);
+        if (pos === code.length) {
+            pos = 0;
+            unlock();
+        }
+    });
+
+    function unlock() {
+        const toast = document.getElementById('konami-toast');
+        toast.hidden = false;
+        document.documentElement.classList.add('konami');
+        clearTimeout(unlock.timer);
+        unlock.timer = setTimeout(function () {
+            toast.hidden = true;
+            document.documentElement.classList.remove('konami');
+            document.removeEventListener('pointermove', sparkle);
+        }, 8000);
+
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.addEventListener('pointermove', sparkle);
+        }
+    }
+
+    const glyphs = ['✦', '✧', '★', '+', '·'];
+    function sparkle(e) {
+        if (Math.random() > 0.5) return;
+        const s = document.createElement('span');
+        s.className = 'sparkle';
+        s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+        s.style.left = e.clientX + 'px';
+        s.style.top = e.clientY + 'px';
+        document.body.appendChild(s);
+        setTimeout(function () { s.remove(); }, 700);
+    }
+})();
+</script>

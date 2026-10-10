@@ -1,93 +1,85 @@
 <div id="human-status" class="human-status">
-    <div class="status-header">
-        <span class="status-label">🤖 HUMAN STATUS</span>
-    </div>
     <div class="status-content">
-        <div class="status-icon">
-            <span id="status-emoji">💤</span>
-        </div>
+        <span class="status-icon" id="status-emoji" aria-hidden="true">💤</span>
         <div class="status-text">
             <span id="status-activity">Sleeping</span>
-            <div class="status-time">
-                <span id="current-time"></span>
-            </div>
+            <span class="status-time">local time <span id="current-time">--:--</span> (Algeria)</span>
         </div>
     </div>
-    <div class="status-bar">
+    <div class="status-bar" role="img" aria-label="Energy level">
         <div class="status-bar-fill" id="energy-bar"></div>
     </div>
+    <span class="status-caption">energy</span>
 </div>
 
 <script>
-function updateHumanStatus() {
-    const now = new Date();
-    const hour = now.getHours();
-    const day = now.getDay(); // 0 = Sunday, 6 = Saturday
-    const timeString = now.toLocaleTimeString('en-US', { 
-        hour12: false, 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-    
-    let status = {
-        activity: 'Unknown',
-        emoji: '❓',
-        energy: 50
-    };
-    
-    // Weekend logic
-    if (day === 0 || day === 6) {
-        if (hour >= 7 && hour < 10) {
-            status = { activity: 'Gaming', emoji: '🎮', energy: 85 };
-        } else if (hour >= 10 && hour < 12) {
-            status = { activity: 'Lifting', emoji: '💪', energy: 95 };
-        } else if (hour >= 12 && hour < 14) {
-            status = { activity: 'Eating', emoji: '🍕', energy: 70 };
-        } else if (hour >= 14 && hour < 18) {
-            status = { activity: 'Gaming', emoji: '🎮', energy: 80 };
-        } else if (hour >= 18 && hour < 22) {
-            status = { activity: 'Coding', emoji: '💻', energy: 75 };
-        } else if (hour >= 22 || hour < 2) {
-            status = { activity: 'Gaming', emoji: '🎮', energy: 60 };
-        } else {
-            status = { activity: 'Sleeping', emoji: '💤', energy: 20 };
-        }
-    } else {
-        // Weekday logic
-        if (hour >= 6 && hour < 8) {
-            status = { activity: 'Lifting', emoji: '💪', energy: 90 };
-        } else if (hour >= 8 && hour < 12) {
-            status = { activity: 'Working', emoji: '👨‍💻', energy: 85 };
-        } else if (hour >= 12 && hour < 13) {
-            status = { activity: 'Eating', emoji: '🥙', energy: 70 };
-        } else if (hour >= 13 && hour < 17) {
-            status = { activity: 'Working', emoji: '👨‍💻', energy: 75 };
-        } else if (hour >= 17 && hour < 19) {
-            status = { activity: 'Commuting', emoji: '🚗', energy: 65 };
-        } else if (hour >= 19 && hour < 21) {
-            status = { activity: 'Eating', emoji: '🍽️', energy: 70 };
-        } else if (hour >= 21 && hour < 23) {
-            status = { activity: 'Coding', emoji: '💻', energy: 80 };
-        } else if (hour >= 23 || hour < 2) {
-            status = { activity: 'Gaming', emoji: '🎮', energy: 60 };
-        } else {
-            status = { activity: 'Sleeping', emoji: '💤', energy: 15 };
-        }
+(function () {
+    // Schedule is based on Algerian time (UTC+1), not the visitor's.
+    function algeriaNow() {
+        const now = new Date();
+        return new Date(now.getTime() + (now.getTimezoneOffset() + 60) * 60000);
     }
-    
-    // Update DOM elements
-    document.getElementById('status-emoji').textContent = status.emoji;
-    document.getElementById('status-activity').textContent = status.activity;
-    document.getElementById('current-time').textContent = timeString;
-    document.getElementById('energy-bar').style.width = status.energy + '%';
-    
-    // Add some fun random variation to energy
-    const variation = Math.floor(Math.random() * 20) - 10;
-    const finalEnergy = Math.max(5, Math.min(100, status.energy + variation));
-    document.getElementById('energy-bar').style.width = finalEnergy + '%';
-}
 
-// Update immediately and then every minute
-updateHumanStatus();
-setInterval(updateHumanStatus, 60000);
+    function updateHumanStatus() {
+        const now = algeriaNow();
+        const hour = now.getHours();
+        const day = now.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
+        const timeString = String(hour).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+        let status;
+
+        // Weekend logic
+        if (day === 5 || day === 6) {
+            if (hour >= 8 && hour < 10) {
+                status = { activity: 'Lifting', emoji: '💪', energy: 95 };
+            } else if (hour >= 10 && hour < 13) {
+                status = { activity: 'Gaming', emoji: '🎮', energy: 85 };
+            } else if (hour >= 13 && hour < 15) {
+                status = { activity: 'Eating', emoji: '🍕', energy: 70 };
+            } else if (hour >= 15 && hour < 19) {
+                status = { activity: 'Side projects', emoji: '🛠️', energy: 80 };
+            } else if (hour >= 19 && hour < 21) {
+                status = { activity: 'Eating', emoji: '🍽️', energy: 70 };
+            } else if (hour >= 21 || hour < 1) {
+                status = { activity: 'Gaming', emoji: '🎮', energy: 60 };
+            } else {
+                status = { activity: 'Sleeping', emoji: '💤', energy: 20 };
+            }
+        } else {
+            // Weekday logic (freelancing)
+            if (hour >= 6 && hour < 8) {
+                status = { activity: 'Lifting', emoji: '💪', energy: 90 };
+            } else if (hour >= 8 && hour < 9) {
+                status = { activity: 'Coffee & inbox', emoji: '☕', energy: 75 };
+            } else if (hour >= 9 && hour < 12) {
+                status = { activity: 'Client work', emoji: '👨‍💻', energy: 90 };
+            } else if (hour >= 12 && hour < 13) {
+                status = { activity: 'Eating', emoji: '🥙', energy: 70 };
+            } else if (hour >= 13 && hour < 18) {
+                status = { activity: 'Client work', emoji: '👨‍💻', energy: 75 };
+            } else if (hour >= 18 && hour < 20) {
+                status = { activity: 'Eating', emoji: '🍽️', energy: 70 };
+            } else if (hour >= 20 && hour < 23) {
+                status = { activity: 'Writing / tinkering', emoji: '✍️', energy: 70 };
+            } else if (hour >= 23 || hour < 1) {
+                status = { activity: 'Gaming', emoji: '🎮', energy: 55 };
+            } else {
+                status = { activity: 'Sleeping', emoji: '💤', energy: 15 };
+            }
+        }
+
+        // Add some fun random variation to energy
+        const variation = Math.floor(Math.random() * 20) - 10;
+        const finalEnergy = Math.max(5, Math.min(100, status.energy + variation));
+
+        document.getElementById('status-emoji').textContent = status.emoji;
+        document.getElementById('status-activity').textContent = status.activity;
+        document.getElementById('current-time').textContent = timeString;
+        document.getElementById('energy-bar').style.width = finalEnergy + '%';
+    }
+
+    // Update immediately and then every minute
+    updateHumanStatus();
+    setInterval(updateHumanStatus, 60000);
+})();
 </script>

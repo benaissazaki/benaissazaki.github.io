@@ -1,4 +1,4 @@
-baseURL = ''
+baseURL = 'https://benaissazaki.com/'
 languageCode = 'en-us'
 title = 'Benaissa Zaki'
 disableKinds = ['taxonomy', 'term']
@@ -6,3 +6,47 @@ enableRobotsTXT = true
 
 [markup.goldmark.renderer]
   unsafe = true # Allow HTML in md files
+
+[params]
+  tagline = 'software engineer // algeria'
+  email = 'contact@benaissazaki.com'
+  github = 'https://github.com/benaissazaki'
+  linkedin = 'https://www.linkedin.com/in/zaki-benaissa/'
+
+  # Visitor counter: a URL returning JSON with a numeric `count` (or `value`)
+  # field, e.g. a self-hosted or no-cookie counter API. Empty = counter hidden.
+  counter = ''
+
+  # Webring / neighbours shown in the footer strip. Add sites you like:
+  # neighbours = [{ name = 'Some Site', url = 'https://example.com' }]
+  neighbours = []
+
+  # Guestbook (giscus, backed by GitHub Discussions). Fill in from
+  # https://giscus.app after enabling Discussions on the repo. Empty = setup notice.
+  [params.giscus]
+    repo = ''
+    repoId = ''
+    category = ''
+    categoryId = ''
+
+[menus]
+  [[menus.main]]
+    name = 'home'
+    url = '/'
+    weight = 1
+  [[menus.main]]
+    name = 'blog'
+    url = '/blog/'
+    weight = 2
+  [[menus.main]]
+    name = 'now'
+    url = '/now/'
+    weight = 3
+  [[menus.main]]
+    name = 'uses'
+    url = '/uses/'
+    weight = 4
+  [[menus.main]]
+    name = 'guestbook'
+    url = '/guestbook/'
+    weight = 5

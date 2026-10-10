@@ -1,57 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+{{ define "styles" }}
+{{ $article_style := resources.Get "css/article.css" | resources.Minify }}
+<link rel="stylesheet" href="{{ $article_style.RelPermalink }}">
+{{ end }}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{ $style := resources.Get "css/style.css" | resources.Minify }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
-    {{ $article_style := resources.Get "css/article.css" | resources.Minify }}
-    <link rel="stylesheet" href="{{ $article_style.Permalink }}">
-    <link rel="canonical" href="https://benaissazaki.com{{ .RelPermalink }}">
-    <meta name="description" content="{{ .Description }}">
-    <meta name="og:type" content="article">
-    <meta name="og:published_time" content="{{ .Date }}">
-    <meta name="og:locale" content="en_GB">
-    <meta name="og:title" content="{{ .Title }}">
-    <meta name="og:description" content="{{ .Description }}">
-    <meta name="twitter:title" content="{{ .Title }}">
-    <meta name="twitter:description" content="{{ .Description }}">
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Article",
-          "headline": "{{ .Title }}",
-          "author": {
-            "@type": "Person",
-            "name": "Benaissa Zaki",
-            "url": "https://benaissazaki.com"
-          },  
-          "datePublished": "{{ .Date }}"
-        }
-    </script>
-    <title>{{ .Title }}</title>
-</head>
+{{ define "head" }}
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {{ .Title }},
+      "author": {
+        "@type": "Person",
+        "name": "Benaissa Zaki",
+        "url": "https://benaissazaki.com"
+      },
+      "datePublished": {{ .Date.Format "2006-01-02T15:04:05Z07:00" }}
+    }
+</script>
+{{ end }}
 
-<body>
-    <main>
-        <ul class="breadcrumb">
-            <li><a href="/">Home</a></li>
-            <li>Blog</li>
-            <li>{{ .Title }}</li>
-        </ul>
-        <article>
-            <h1>{{ .Title }}</h1>
-            {{ .Content }}
-        </article>
-    </main>
-    <footer>
-        <div id="credits">
-            Made with 🗿 by <strong>Zaki Benaissa</strong>
-        </div>
-    </footer>
-    
-    {{ partial "human-status.html" . }}
-</body>
-
-</html>
+{{ define "main" }}
+<nav aria-label="Breadcrumb">
+    <ul class="breadcrumb">
+        <li><a href="/">home</a></li>
+        <li><a href="/blog/">blog</a></li>
+        <li aria-current="page">{{ .Title }}</li>
+    </ul>
+</nav>
+<article class="article">
+    <header class="article__header">
+        <h1>{{ with .Params.emoji }}<span class="article__emoji" aria-hidden="true">{{ . }}</span> {{ end }}{{ .Title }}</h1>
+        <p class="article__meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+            · {{ .ReadingTime }} min read
+        </p>
+    </header>
+    {{ .Content }}
+</article>
+<nav class="article__pager" aria-label="More posts">
+    {{ with .NextInSection }}<a href="{{ .RelPermalink }}">← older: {{ .Title }}</a>{{ end }}
+    {{ with .PrevInSection }}<a href="{{ .RelPermalink }}">newer: {{ .Title }} →</a>{{ end }}
+</nav>
+{{ end }}
