@@ -1,33 +1,11 @@
 <footer class="site-footer">
-    <div class="webring">
-        {{ with site.Params.neighbours }}
-        {{ $n := len . }}
-        <span class="webring__label">~ neighbours ~</span>
-        <a href="{{ (index . (sub $n 1)).url }}" rel="noopener">← prev</a>
-        <a href="#" class="webring__random" data-sites="{{ jsonify . }}">random</a>
-        <a href="{{ (index . 0).url }}" rel="noopener">next →</a>
-        {{ else }}
-        <span class="webring__label">~ webring slot reserved ~</span>
-        <span>know a good indie site? <a href="mailto:{{ site.Params.email }}">send it my way</a></span>
-        {{ end }}
-    </div>
     <div class="site-footer__meta">
-        <span>made with 🗿 by <strong>Zaki Benaissa</strong> · hand-written html &amp; css</span>
+        <span>made with 🗿 by <strong>Zaki Benaissa</strong></span>
         <span>
             <a href="{{ site.Params.github }}">github</a> ·
             <a href="{{ site.Params.linkedin }}">linkedin</a> ·
-            <a href="mailto:{{ site.Params.email }}">email</a> ·
             <a href="/index.xml">rss</a>
         </span>
         <span class="site-footer__hint" title="you know the one">psst: try the code ↑↑↓↓←→←→BA</span>
     </div>
-    {{ with site.Params.neighbours }}
-    <script>
-    document.querySelector('.webring__random').addEventListener('click', function (e) {
-        e.preventDefault();
-        const sites = JSON.parse(this.dataset.sites);
-        window.location.href = sites[Math.floor(Math.random() * sites.length)].url;
-    });
-    </script>
-    {{ end }}
 </footer>

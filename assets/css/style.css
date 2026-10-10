@@ -462,33 +462,11 @@ a.b88 {
     font-size: 0.9rem;
 }
 
-.webring {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px 18px;
-    padding: 10px 14px;
-    background: var(--sun);
-    border: 2px solid var(--line);
-    box-shadow: var(--shadow);
-    font-family: var(--font-pixel);
-    font-size: 0.85rem;
-}
-
-.webring a {
-    color: var(--ink);
-}
-
-.webring a:hover {
-    background: var(--paper);
-}
-
 .site-footer__meta {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 8px 20px;
-    margin-top: 16px;
     padding: 0 4px;
     color: var(--ink);
 }
@@ -633,7 +611,8 @@ a.b88 {
 
 .stack {
     display: grid;
-    grid-template-columns: 7.5em 1fr;
+    grid-template-columns: max-content 1fr;
+    column-gap: 1.25em;
 }
 
 .stack dt {
@@ -642,11 +621,6 @@ a.b88 {
 
 .stack dd {
     margin: 0;
-}
-
-img.gh-activity {
-    display: block;
-    width: 100%;
 }
 
 /* post lists */

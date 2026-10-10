@@ -8,7 +8,7 @@ description: Zaki Benaissa is a freelance software engineer from Algeria with 6 
 <h1>Hi, I'm Zaki 👋</h1>
 <p>I'm a freelance <strong>software engineer</strong> from Algeria 🇩🇿 with <strong>6 years</strong> of experience and a Master's degree. I build web apps, websites and the odd tool, and I care a lot about making them fast, secure and pleasant to maintain.</p>
 <p>Off the clock I take things apart to see how they tick: game memory, media servers, microcontrollers. Then I write about it.</p>
-<a class="cta" href="mailto:contact@benaissazaki.com">work with me →</a>
+<a class="cta" href="https://www.linkedin.com/in/zaki-benaissa/">work with me →</a>
 <a class="cta cta--ghost" href="/blog/">read the blog</a>
 </div>
 <div class="hero__badge" aria-hidden="true" title="that's me, roughly">🗿</div>
@@ -26,6 +26,11 @@ description: Zaki Benaissa is a freelance software engineer from Algeria with 6 
 ## Things I've built
 
 <ul class="projects">
+<li>
+<strong>Mò 墨</strong>
+<p>An Android app for learning Chinese characters, with animated stroke order and spaced repetition. I built it for personal use because every other app either skipped the strokes or hid them behind a paywall.</p>
+<span class="tag">kotlin</span><span class="tag">android</span>
+</li>
 <li>
 <a href="https://github.com/benaissazaki/palantir-media-server">Palantir Media Server</a>
 <p>A tiny media server in Rust that streams my movie folder to every screen in the house. <a href="/blog/a-better-way-to-watch-movies-on-tv/">Write-up here.</a></p>
@@ -49,7 +54,8 @@ description: Zaki Benaissa is a freelance software engineer from Algeria with 6 
 <dt>languages</dt><dd>Python · JavaScript · PHP · Rust</dd>
 <dt>frameworks</dt><dd>Django · Laravel · React · Flutter · WordPress</dd>
 <dt>data</dt><dd>PostgreSQL · MySQL</dd>
-<dt>os</dt><dd>Arch Linux (btw) · Windows when a game demands it</dd>
+<dt>os</dt><dd>Arch Linux (btw)</dd>
+<dt>anything else</dt><dd>give me a week (two if it's an undocumented esoteric language)</dd>
 </dl>
 
 ## Latest writing
@@ -58,13 +64,6 @@ description: Zaki Benaissa is a freelance software engineer from Algeria with 6 
 
 <a href="/blog/">all posts →</a>
 
-{{< box title="github_activity.png" >}}
-<a href="https://github.com/benaissazaki">
-<img class="gh-activity" alt="Zaki's recent GitHub activity graph" loading="lazy"
-src="https://github-readme-activity-graph.vercel.app/graph?username=benaissazaki&theme=github-compact&custom_title=Recent%20commits&hide_border=true">
-</a>
-{{< /box >}}
-
 ## Say hi
 
-The fastest way to reach me is email: [contact@benaissazaki.com](mailto:contact@benaissazaki.com). I'm also on [GitHub](https://github.com/benaissazaki) and [LinkedIn](https://www.linkedin.com/in/zaki-benaissa/), or you can leave a note in the [guestbook](/guestbook/).
+The fastest way to reach me is a message on [LinkedIn](https://www.linkedin.com/in/zaki-benaissa/). My code lives on [GitHub](https://github.com/benaissazaki).
