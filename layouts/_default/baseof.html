@@ -17,12 +17,19 @@
     <meta property="og:description" content="{{ .Description }}">
     <meta property="og:site_name" content="{{ site.Title }}">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:image" content="{{ "img/og.png" | absURL }}">
+    {{/* Posts with a cover at static/img/covers/<post>.png use it, everything else the site card */}}
+    {{ $image := "img/og.png" }}
+    {{ $alt := "Hello, I'm Zaki Benaissa. benaissazaki.space" }}
+    {{ with .File }}
+    {{ $cover := printf "img/covers/%s.png" .ContentBaseName }}
+    {{ if fileExists (printf "static/%s" $cover) }}{{ $image = $cover }}{{ $alt = printf "%s, on benaissazaki.space" $.Title }}{{ end }}
+    {{ end }}
+    <meta property="og:image" content="{{ $image | absURL }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Hello, I'm Zaki Benaissa. benaissazaki.space">
+    <meta property="og:image:alt" content="{{ $alt }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{ "img/og.png" | absURL }}">
+    <meta name="twitter:image" content="{{ $image | absURL }}">
     <meta name="twitter:title" content="{{ .Title }}">
     <meta name="twitter:description" content="{{ .Description }}">
     {{ block "head" . }}{{ end }}
