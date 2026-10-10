@@ -5,7 +5,7 @@ description: I am Benaissa Zaki, a Software Engineer from Algeria with 3 years o
 
 # Hello 👋🏻
 
-I am Benaissa Zaki, a Software Engineer from Algeria 🇩🇿 with 3 years of Experience and a Master's degree.
+I am Benaissa Zaki, a Software Engineer from Algeria 🇩🇿 with 6 years of Experience and a Master's degree.
 
 I love writing code, be it for the desktop 🖥️, the web 🕸️, mobile 📱, and even microcontrollers 📟. I constantly like to explore what this vast field has to offer and write about it.
 
