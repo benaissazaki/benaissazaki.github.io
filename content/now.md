@@ -5,7 +5,6 @@ updated: 2026-10-10
 sidebar:
   - Freelancing, taking on new projects
   - Building a management platform for a client (hush)
-  - Redesigning this very website
 ---
 
 ## Work
@@ -23,4 +22,8 @@ Right now most of my days go into a management platform for a client. I can't sa
 
 ## Learning
 
-- <!-- TODO: confirm --> e.g. a new language, book or course
+- Mandarin
+
+## Reading
+
+- *Journey to the West*

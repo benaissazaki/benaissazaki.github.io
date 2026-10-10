@@ -1,4 +1,4 @@
-baseURL = 'https://benaissazaki.com/'
+baseURL = 'https://benaissazaki.space/'
 languageCode = 'en-us'
 title = 'Benaissa Zaki'
 disableKinds = ['taxonomy', 'term']

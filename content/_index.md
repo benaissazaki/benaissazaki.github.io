@@ -11,47 +11,26 @@ description: Zaki Benaissa is a freelance software engineer from Algeria with 6 
 <a class="cta" href="https://www.linkedin.com/in/zaki-benaissa/">work with me →</a>
 <a class="cta cta--ghost" href="/blog/">read the blog</a>
 </div>
-<div class="hero__badge" aria-hidden="true" title="that's me, roughly">🗿</div>
+<div class="hero__badge" aria-hidden="true">💾</div>
 </div>
 
 ## What I can do for you
 
 <ul class="services">
-<li><strong>&gt; web apps</strong><p>Custom back-ends and dashboards with Django or Laravel, front-ends in React.</p></li>
+<li><strong>&gt; web apps</strong><p>Custom back-ends and dashboards with Django, Laravel or Go, front-ends in React.</p></li>
 <li><strong>&gt; websites</strong><p>WordPress sites that load fast, rank well and don't get hacked.</p></li>
 <li><strong>&gt; rescue missions</strong><p>Slow, broken or inherited codebase? I'll dig in, fix it and leave notes.</p></li>
-<li><strong>&gt; the weird stuff</strong><p>CLIs, desktop tools, Flutter apps, Rust services, microcontrollers.</p></li>
+<li><strong>&gt; the weird stuff</strong><p>CLIs, desktop tools, Flutter apps, Rust services, Godot games, reverse engineering old games, microcontrollers.</p></li>
 </ul>
 
 ## Things I've built
 
-<ul class="projects">
-<li>
-<strong>Mò 墨</strong>
-<p>An Android app for learning Chinese characters, with animated stroke order and spaced repetition. I built it for personal use because every other app either skipped the strokes or hid them behind a paywall.</p>
-<span class="tag">kotlin</span><span class="tag">android</span>
-</li>
-<li>
-<a href="https://github.com/benaissazaki/palantir-media-server">Palantir Media Server</a>
-<p>A tiny media server in Rust that streams my movie folder to every screen in the house. <a href="/blog/a-better-way-to-watch-movies-on-tv/">Write-up here.</a></p>
-<span class="tag">rust</span><span class="tag">networking</span>
-</li>
-<li>
-<a href="https://github.com/benaissazaki/django_course_sharing">Django Course Sharing</a>
-<p>A web app for sharing PDF and video courses, with uploads, permissions and all the boring-but-important bits.</p>
-<span class="tag">python</span><span class="tag">django</span>
-</li>
-<li>
-<a href="https://github.com/benaissazaki/yts_cli">YTS CLI</a>
-<p>Browse, search and download movies from the terminal using the YTS API, because the website had too many pop-ups.</p>
-<span class="tag">python</span><span class="tag">cli</span>
-</li>
-</ul>
+{{< projects >}}
 
 ## Toolbox
 
 <dl class="stack">
-<dt>languages</dt><dd>Python · JavaScript · PHP · Rust</dd>
+<dt>languages</dt><dd>Python · JavaScript · PHP · Go · Rust</dd>
 <dt>frameworks</dt><dd>Django · Laravel · React · Flutter · WordPress</dd>
 <dt>data</dt><dd>PostgreSQL · MySQL</dd>
 <dt>os</dt><dd>Arch Linux (btw)</dd>
