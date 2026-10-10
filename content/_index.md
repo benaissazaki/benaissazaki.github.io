@@ -1,73 +1,70 @@
 ---
-title: Benaissa Zaki - Software Engineer from Algeria
-description: I am Benaissa Zaki, a Software Engineer from Algeria with 3 years of Experience and a Master's degree.
+title: Zaki Benaissa · Freelance Software Engineer from Algeria
+description: Zaki Benaissa is a freelance software engineer from Algeria with 6 years of experience building fast, secure web apps, websites and tools.
 ---
 
-# Hello 👋🏻
-
-I am Benaissa Zaki, a Software Engineer from Algeria 🇩🇿 with 6 years of Experience and a Master's degree.
-
-I love writing code, be it for the desktop 🖥️, the web 🕸️, mobile 📱, and even microcontrollers 📟. I constantly like to explore what this vast field has to offer and write about it.
-
+<div class="hero">
 <div>
-    <a href="https://github.com/benaissazaki">
-        <img class="gh-activity" alt="Zaki Github Activity"
-            src="https://github-readme-activity-graph.vercel.app/graph?username=benaissazaki&theme=github-dark-dimmed&custom_title=My%20Recent%20Github%20Activity%20Graph&hide_border=true">
-    </a>
+<h1>Hi, I'm Zaki 👋</h1>
+<p>I'm a freelance <strong>software engineer</strong> from Algeria 🇩🇿 with <strong>6 years</strong> of experience and a Master's degree. I build web apps, websites and the odd tool, and I care a lot about making them fast, secure and pleasant to maintain.</p>
+<p>Off the clock I take things apart to see how they tick: game memory, media servers, microcontrollers. Then I write about it.</p>
+<a class="cta" href="mailto:contact@benaissazaki.com">work with me →</a>
+<a class="cta cta--ghost" href="/blog/">read the blog</a>
+</div>
+<div class="hero__badge" aria-hidden="true" title="that's me, roughly">🗿</div>
 </div>
 
-## I know
+## What I can do for you
 
-### Frameworks
+<ul class="services">
+<li><strong>&gt; web apps</strong><p>Custom back-ends and dashboards with Django or Laravel, front-ends in React.</p></li>
+<li><strong>&gt; websites</strong><p>WordPress sites that load fast, rank well and don't get hacked.</p></li>
+<li><strong>&gt; rescue missions</strong><p>Slow, broken or inherited codebase? I'll dig in, fix it and leave notes.</p></li>
+<li><strong>&gt; the weird stuff</strong><p>CLIs, desktop tools, Flutter apps, Rust services, microcontrollers.</p></li>
+</ul>
 
-![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
-![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
-![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+## Things I've built
 
-### Languages
+<ul class="projects">
+<li>
+<a href="https://github.com/benaissazaki/palantir-media-server">Palantir Media Server</a>
+<p>A tiny media server in Rust that streams my movie folder to every screen in the house. <a href="/blog/a-better-way-to-watch-movies-on-tv/">Write-up here.</a></p>
+<span class="tag">rust</span><span class="tag">networking</span>
+</li>
+<li>
+<a href="https://github.com/benaissazaki/django_course_sharing">Django Course Sharing</a>
+<p>A web app for sharing PDF and video courses, with uploads, permissions and all the boring-but-important bits.</p>
+<span class="tag">python</span><span class="tag">django</span>
+</li>
+<li>
+<a href="https://github.com/benaissazaki/yts_cli">YTS CLI</a>
+<p>Browse, search and download movies from the terminal using the YTS API, because the website had too many pop-ups.</p>
+<span class="tag">python</span><span class="tag">cli</span>
+</li>
+</ul>
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Javascript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
+## Toolbox
 
-### Databases
+<dl class="stack">
+<dt>languages</dt><dd>Python · JavaScript · PHP · Rust</dd>
+<dt>frameworks</dt><dd>Django · Laravel · React · Flutter · WordPress</dd>
+<dt>data</dt><dd>PostgreSQL · MySQL</dd>
+<dt>os</dt><dd>Arch Linux (btw) · Windows when a game demands it</dd>
+</dl>
 
-![MySQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+## Latest writing
 
-### Other
+{{< latest-articles limit="5" >}}
 
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
-![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+<a href="/blog/">all posts →</a>
 
-## I am currently
-
-- Developing and managing WordPress websites at [Webdispo](https://www.webdispo.com/en/)
-- Contributing to open-source projects
-- Aiming to have at least a GitHub commit per day in 2024 (which is why you'll find some random useless commits here and there)
-- Writing on my blog
-
-## Here is what I built
-
-- [Palantir Media Server](https://github.com/benaissazaki/palantir-media-server)
-- [Django Course Sharing](https://github.com/benaissazaki/django_course_sharing)
-- [YTS CLI](https://github.com/benaissazaki/yts_cli)
-
-## My latest articles
-
-{{< latest-articles >}}
-
-## Let's connect
-
-<a href="https://github.com/benaissazaki" style="text-decoration: none;">
-    <img width="80"
-        src="https://raw.githubusercontent.com/gauravghongde/social-icons/master/SVG/Color/Github.svg"
-        alt="Github">
+{{< box title="github_activity.png" >}}
+<a href="https://github.com/benaissazaki">
+<img class="gh-activity" alt="Zaki's recent GitHub activity graph" loading="lazy"
+src="https://github-readme-activity-graph.vercel.app/graph?username=benaissazaki&theme=github-compact&custom_title=Recent%20commits&hide_border=true">
 </a>
-<a href="https://www.linkedin.com/in/zaki-benaissa/" style="text-decoration: none;">
-    <img width="80"
-        src="https://raw.githubusercontent.com/gauravghongde/social-icons/master/SVG/Color/LinkedIN.svg"
-        alt="LinkedIn">
-</a>
+{{< /box >}}
+
+## Say hi
+
+The fastest way to reach me is email: [contact@benaissazaki.com](mailto:contact@benaissazaki.com). I'm also on [GitHub](https://github.com/benaissazaki) and [LinkedIn](https://www.linkedin.com/in/zaki-benaissa/), or you can leave a note in the [guestbook](/guestbook/).
