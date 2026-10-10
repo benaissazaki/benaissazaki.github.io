@@ -1,6 +1,7 @@
 ---
 title: 6 Django Tips to go From Beginner to Intermediate
 date: 2024-02-02T12:00:00Z
+emoji: "🍡"
 description: Essential tips to go from being a Beginner in the Django framework to an Intermediate
 ---
 

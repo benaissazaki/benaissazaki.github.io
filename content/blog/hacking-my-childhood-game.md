@@ -1,6 +1,7 @@
 ---
 title: "Hacking my childhood game"
 date: 2023-04-16T12:00:00Z
+emoji: "🕹️"
 description: I will detail the step-by-step process I followed to change the behavior of Battle For Middle-Earth II
 ---
 

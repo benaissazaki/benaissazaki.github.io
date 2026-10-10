@@ -1,6 +1,7 @@
 ---
 title: Security strategies for your WordPress website
 date: 2023-08-26T12:00:00Z
+emoji: "🔒"
 description: This guide will help you understand the primary vulnerabilities that attackers can exploit to compromise your website and how to reduce potential risks.
 ---
 
