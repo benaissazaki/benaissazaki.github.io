@@ -1,0 +1,14 @@
+# Shown under "Things I've built" on the homepage and by `ls projects` in the console.
+- name: Mò 墨
+  description: An Android app for learning Chinese characters, with animated stroke order and spaced repetition. I built it for personal use because every other app either skipped the strokes or hid them behind a paywall.
+  tags: [kotlin, android]
+
+- name: Palantir Media Server
+  url: https://github.com/benaissazaki/palantir-media-server
+  description: A tiny media server in Rust that streams my movie folder to every screen in the house. [Write-up here.](/blog/a-better-way-to-watch-movies-on-tv/)
+  tags: [rust, networking]
+
+- name: Django Course Sharing
+  url: https://github.com/benaissazaki/django_course_sharing
+  description: A web app for sharing PDF and video courses, with uploads, permissions and all the boring-but-important bits.
+  tags: [python, django]

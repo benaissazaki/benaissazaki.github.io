@@ -1,0 +1,20 @@
+{{ define "main" }}
+<div class="page-content">
+    <h1>The blog</h1>
+    <p>Notes from the job and from the weekends: web performance and security, Django, Rust, and the occasional deep dive into an old game's memory.</p>
+    {{ range .Pages.ByDate.Reverse.GroupByDate "2006" }}
+    <section class="archive">
+        <h2 class="archive__year">{{ .Key }}</h2>
+        <ul class="post-list">
+            {{ range .Pages }}
+            <li style="list-style-type: '{{ .Params.emoji | default "📝" }} ';">
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 02" }}</time>
+                {{ with .Description }}<p>{{ . }}</p>{{ end }}
+            </li>
+            {{ end }}
+        </ul>
+    </section>
+    {{ end }}
+</div>
+{{ end }}

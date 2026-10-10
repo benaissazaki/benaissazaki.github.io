@@ -1,4 +1,4 @@
-baseURL = ''
+baseURL = 'https://benaissazaki.space/'
 languageCode = 'en-us'
 title = 'Benaissa Zaki'
 disableKinds = ['taxonomy', 'term']
@@ -6,3 +6,30 @@ enableRobotsTXT = true
 
 [markup.goldmark.renderer]
   unsafe = true # Allow HTML in md files
+
+[params]
+  tagline = 'software engineer // algeria'
+  github = 'https://github.com/benaissazaki'
+  linkedin = 'https://www.linkedin.com/in/zaki-benaissa/'
+
+  # Visitor counter: a URL returning JSON with a numeric `count` (or `value`)
+  # field, e.g. a self-hosted or no-cookie counter API. Empty = counter hidden.
+  counter = ''
+
+[menus]
+  [[menus.main]]
+    name = 'home'
+    url = '/'
+    weight = 1
+  [[menus.main]]
+    name = 'blog'
+    url = '/blog/'
+    weight = 2
+  [[menus.main]]
+    name = 'now'
+    url = '/now/'
+    weight = 3
+  [[menus.main]]
+    name = 'uses'
+    url = '/uses/'
+    weight = 4

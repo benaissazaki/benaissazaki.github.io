@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ $style := resources.Get "css/style.css" | resources.Minify }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+    {{ block "styles" . }}{{ end }}
+    <link rel="preload" href="/fonts/DepartureMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="canonical" href="{{ .Permalink }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💾</text></svg>">
+    {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">{{ end }}
+    <meta name="description" content="{{ .Description | default site.Params.tagline }}">
+    <meta property="og:locale" content="en_GB">
+    <meta property="og:title" content="{{ .Title }}">
+    <meta property="og:description" content="{{ .Description }}">
+    <meta property="og:site_name" content="{{ site.Title }}">
+    <meta property="og:url" content="{{ .Permalink }}">
+    <meta property="og:image" content="{{ "img/og.png" | absURL }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Hello, I'm Zaki Benaissa. benaissazaki.space">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ "img/og.png" | absURL }}">
+    <meta name="twitter:title" content="{{ .Title }}">
+    <meta name="twitter:description" content="{{ .Description }}">
+    {{ block "head" . }}{{ end }}
+    <title>{{ if .IsHome }}{{ .Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+</head>
+
+<body>
+    <script>window.eggs = {};</script>
+    <a class="skip-link" href="#content">skip to content</a>
+    {{ partial "eggs/retro.html" . }}
+    <div class="page">
+        {{ partial "header.html" . }}
+        <div class="layout">
+            <main id="content">
+                {{ block "main" . }}{{ end }}
+            </main>
+            {{ partial "sidebar.html" . }}
+        </div>
+        {{ partial "footer.html" . }}
+    </div>
+    {{ partial "eggs/sneak.html" . }}
+    {{ partial "eggs/console.html" . }}
+</body>
+
+</html>

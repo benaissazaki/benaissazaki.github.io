@@ -1,0 +1,20 @@
+<aside class="sidebar" aria-label="Sidebar">
+    {{ partial "box.html" (dict "title" "status.exe" "content" (partial "human-status.html" .)) }}
+
+    {{ with site.GetPage "/now" }}
+    {{ $now := . }}
+    {{ $body := "" }}
+    {{ with .Params.sidebar }}
+    {{ $items := slice }}
+    {{ range . }}{{ $items = $items | append (printf "<li>%s</li>" (. | markdownify)) }}{{ end }}
+    {{ $body = printf "<ul class=\"now-list\">%s</ul><p class=\"box__more\"><a href=\"%s\">more on /now →</a></p>" (delimit $items "") $now.RelPermalink }}
+    {{ end }}
+    {{ partial "box.html" (dict "title" "now.txt" "content" ($body | safeHTML)) }}
+    {{ end }}
+
+    {{ partial "box.html" (dict "title" "buttons.gif" "content" (partial "buttons-88x31.html" .)) }}
+
+    {{ with site.Params.counter }}
+    {{ partial "box.html" (dict "title" "visitors.dat" "content" (partial "counter.html" .) "class" "box--counter") }}
+    {{ end }}
+</aside>

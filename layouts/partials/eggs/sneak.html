@@ -1,0 +1,305 @@
+{{/* Stealth mini-game: ↑↑↓↓←→←→BA (or type `sneak` in the console). */}}
+<div class="sneak" id="sneak" hidden>
+    <canvas class="sneak__canvas"></canvas>
+    <div class="sneak__hud">
+        <span>OBJECTIVE: reach the 🗿 unseen</span>
+        <span class="sneak__time">00.0s</span>
+        <span>hide in boxes · ESC to abort</span>
+    </div>
+    <div class="sneak__msg" role="status" aria-live="polite" hidden></div>
+</div>
+<script>
+(function () {
+    const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let pos = 0;
+
+    document.addEventListener('keydown', function (e) {
+        if (game || (e.target.closest && e.target.closest('input, textarea'))) return;
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        pos = key === code[pos] ? pos + 1 : (key === code[0] ? 1 : 0);
+        if (pos === code.length) {
+            pos = 0;
+            start();
+        }
+    });
+
+    const root = document.getElementById('sneak');
+    const canvas = root.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const timeEl = root.querySelector('.sneak__time');
+    const msgEl = root.querySelector('.sneak__msg');
+    const css = getComputedStyle(document.documentElement);
+    const color = function (name) { return css.getPropertyValue(name).trim(); };
+    const C = { ink: color('--ink'), paper: color('--paper'), accent: color('--accent'), sun: color('--sun'), teal: color('--teal') };
+
+    const PLAYER_SPEED = 230;
+    const GUARD_SPEED = 85;
+    const FOV = Math.PI / 3;
+    const BOX = 46;
+    const SENTRY_SPIN = 1.1;
+
+    let game = null;
+
+    window.eggs.sneak = start;
+
+    function start() {
+        root.hidden = false;
+        document.documentElement.classList.add('sneaking');
+        resize();
+        window.addEventListener('resize', resize);
+        root.addEventListener('pointermove', onPointer);
+        root.addEventListener('pointerdown', onPointerDown);
+        document.addEventListener('keydown', onKey);
+        document.addEventListener('keyup', onKey);
+        reset();
+        requestAnimationFrame(loop);
+    }
+
+    function stop() {
+        game = null;
+        root.hidden = true;
+        document.documentElement.classList.remove('sneaking');
+        window.removeEventListener('resize', resize);
+        root.removeEventListener('pointermove', onPointer);
+        root.removeEventListener('pointerdown', onPointerDown);
+        document.removeEventListener('keydown', onKey);
+        document.removeEventListener('keyup', onKey);
+    }
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = innerWidth * dpr;
+        canvas.height = innerHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        if (game) {
+            reset();
+            draw();
+        }
+    }
+
+    // Level geometry is in viewport fractions so it fits any screen.
+    function layout() {
+        const W = innerWidth, H = innerHeight;
+        const p = function (x, y) { return { x: x * W, y: y * H }; };
+        game.W = W;
+        game.H = H;
+        game.range = Math.max(110, Math.min(230, Math.min(W, H) * 0.3));
+        game.startPad = p(0.08, 0.86);
+        game.goal = p(0.9, 0.16);
+        game.boxes = [p(0.33, 0.62), p(0.52, 0.3), p(0.78, 0.55)];
+        const routes = [
+            [p(0.12, 0.45), p(0.62, 0.45)],
+            [p(0.68, 0.1), p(0.68, 0.88)],
+            [p(0.3, 0.12), p(0.3, 0.3), p(0.55, 0.12)],
+            [p(0.82, 0.3)]
+        ];
+        game.guards = routes.map(function (route) {
+            return { route: route, x: route[0].x, y: route[0].y, target: 1, angle: 0, wait: 0 };
+        });
+    }
+
+    function reset() {
+        game = { state: 'play', time: 0, keys: {}, pointer: null, last: performance.now() };
+        layout();
+        game.player = { x: game.startPad.x, y: game.startPad.y };
+        msgEl.hidden = true;
+    }
+
+    function onPointer(e) {
+        game.pointer = { x: e.clientX, y: e.clientY };
+    }
+
+    function onPointerDown(e) {
+        if (game.state !== 'play') reset();
+        else onPointer(e);
+    }
+
+    function onKey(e) {
+        if (!game) return;
+        if (e.type === 'keydown' && e.key === 'Escape') return stop();
+        if (e.type === 'keydown' && game.state !== 'play' && (e.key === 'r' || e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            return reset();
+        }
+        const k = { ArrowUp: 'u', w: 'u', ArrowDown: 'd', s: 'd', ArrowLeft: 'l', a: 'l', ArrowRight: 'r', d: 'r' }[e.key];
+        if (k) {
+            e.preventDefault();
+            game.keys[k] = e.type === 'keydown';
+            game.pointer = null;
+        }
+    }
+
+    function hidden(pt) {
+        return game.boxes.some(function (b) { return Math.abs(pt.x - b.x) < BOX / 2 && Math.abs(pt.y - b.y) < BOX / 2; });
+    }
+
+    function sees(g, pt) {
+        const dx = pt.x - g.x, dy = pt.y - g.y;
+        if (Math.hypot(dx, dy) > game.range) return false;
+        let diff = Math.atan2(dy, dx) - g.angle;
+        diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+        return Math.abs(diff) < FOV / 2;
+    }
+
+    function update(dt) {
+        const pl = game.player;
+        let vx = 0, vy = 0;
+        if (game.pointer) {
+            vx = game.pointer.x - pl.x;
+            vy = game.pointer.y - pl.y;
+        } else {
+            vx = (game.keys.r ? 1 : 0) - (game.keys.l ? 1 : 0);
+            vy = (game.keys.d ? 1 : 0) - (game.keys.u ? 1 : 0);
+        }
+        const len = Math.hypot(vx, vy);
+        const step = PLAYER_SPEED * dt;
+        if (len > 0) {
+            const m = game.pointer ? Math.min(step, len) / len : step / len;
+            pl.x = Math.max(8, Math.min(game.W - 8, pl.x + vx * m));
+            pl.y = Math.max(8, Math.min(game.H - 8, pl.y + vy * m));
+        }
+
+        game.guards.forEach(function (g) {
+            if (g.route.length === 1) {
+                g.angle += SENTRY_SPIN * dt;
+                return;
+            }
+            if (g.wait > 0) {
+                g.wait -= dt;
+                g.angle = g.baseAngle + Math.sin((1 - g.wait / 1.4) * Math.PI * 2) * 0.9;
+                return;
+            }
+            const t = g.route[g.target];
+            const dx = t.x - g.x, dy = t.y - g.y, d = Math.hypot(dx, dy);
+            const move = GUARD_SPEED * dt;
+            g.angle = Math.atan2(dy, dx) + Math.sin(game.time * 2.2) * 0.45;
+            if (d <= move) {
+                g.x = t.x;
+                g.y = t.y;
+                g.wait = 1.4;
+                g.baseAngle = Math.atan2(dy, dx);
+                g.target = (g.target + 1) % g.route.length;
+            } else {
+                g.x += dx / d * move;
+                g.y += dy / d * move;
+            }
+        });
+
+        game.time += dt;
+        timeEl.textContent = game.time.toFixed(1) + 's';
+
+        if (!hidden(pl)) {
+            const spotter = game.guards.find(function (g) { return sees(g, pl); });
+            if (spotter) {
+                game.state = 'caught';
+                game.spotter = spotter;
+                show('<strong>!</strong><span>you were spotted.</span><small>click or press R to try again · ESC to quit</small>', 'caught');
+                return;
+            }
+        }
+        if (Math.hypot(pl.x - game.goal.x, pl.y - game.goal.y) < 26) {
+            game.state = 'won';
+            let best = null;
+            try {
+                best = parseFloat(localStorage.getItem('sneak-best')) || null;
+                if (!best || game.time < best) localStorage.setItem('sneak-best', game.time.toFixed(1));
+            } catch (err) { /* no storage, no records */ }
+            const record = best && game.time >= best ? 'best: ' + best.toFixed(1) + 's' : 'new personal best!';
+            show('<strong>MISSION COMPLETE</strong><span>' + game.time.toFixed(1) + 's · rank: ' + rank(game.time) + '</span><small>' + record + ' · R to replay · ESC to quit</small>', 'won');
+        }
+    }
+
+    function rank(t) {
+        if (t < 12) return 'GHOST';
+        if (t < 20) return 'FOX';
+        if (t < 35) return 'SHADOW';
+        return 'CARDBOARD BOX';
+    }
+
+    function show(html, kind) {
+        msgEl.innerHTML = html;
+        msgEl.className = 'sneak__msg sneak__msg--' + kind;
+        msgEl.hidden = false;
+    }
+
+    function draw() {
+        const W = game.W, H = game.H;
+        ctx.clearRect(0, 0, W, H);
+
+        // start pad and goal
+        ctx.strokeStyle = C.paper;
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(game.startPad.x - 22, game.startPad.y - 22, 44, 44);
+        ctx.setLineDash([]);
+        ctx.font = '34px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🗿', game.goal.x, game.goal.y);
+
+        // vision cones
+        game.guards.forEach(function (g) {
+            const alert = game.state === 'caught' && game.spotter === g;
+            ctx.fillStyle = alert ? 'rgba(255, 90, 31, 0.45)' : 'rgba(255, 210, 63, 0.28)';
+            ctx.beginPath();
+            ctx.moveTo(g.x, g.y);
+            ctx.arc(g.x, g.y, game.range, g.angle - FOV / 2, g.angle + FOV / 2);
+            ctx.closePath();
+            ctx.fill();
+        });
+
+        // cardboard boxes
+        game.boxes.forEach(function (b) {
+            ctx.fillStyle = '#c8955a';
+            ctx.strokeStyle = C.ink;
+            ctx.lineWidth = 2;
+            ctx.fillRect(b.x - BOX / 2, b.y - BOX / 2, BOX, BOX);
+            ctx.strokeRect(b.x - BOX / 2, b.y - BOX / 2, BOX, BOX);
+            ctx.beginPath();
+            ctx.moveTo(b.x - BOX / 2, b.y);
+            ctx.lineTo(b.x + BOX / 2, b.y);
+            ctx.stroke();
+        });
+
+        // guards
+        game.guards.forEach(function (g) {
+            ctx.fillStyle = C.ink;
+            ctx.strokeStyle = C.paper;
+            ctx.lineWidth = 2;
+            ctx.fillRect(g.x - 9, g.y - 9, 18, 18);
+            ctx.strokeRect(g.x - 9, g.y - 9, 18, 18);
+            ctx.fillStyle = C.sun;
+            ctx.fillRect(g.x + Math.cos(g.angle) * 5 - 2, g.y + Math.sin(g.angle) * 5 - 2, 4, 4);
+            if (game.state === 'caught' && game.spotter === g) {
+                ctx.font = 'bold 30px sans-serif';
+                ctx.fillStyle = C.accent;
+                ctx.fillText('!', g.x, g.y - 28);
+            }
+        });
+
+        // player (drawn as a box when hiding)
+        const pl = game.player;
+        if (hidden(pl)) {
+            ctx.strokeStyle = C.accent;
+            ctx.lineWidth = 3;
+            const b = game.boxes.find(function (b) { return Math.abs(pl.x - b.x) < BOX / 2 && Math.abs(pl.y - b.y) < BOX / 2; });
+            ctx.strokeRect(b.x - BOX / 2 - 3, b.y - BOX / 2 - 3, BOX + 6, BOX + 6);
+        } else {
+            ctx.fillStyle = C.accent;
+            ctx.strokeStyle = C.ink;
+            ctx.lineWidth = 2;
+            ctx.fillRect(pl.x - 7, pl.y - 7, 14, 14);
+            ctx.strokeRect(pl.x - 7, pl.y - 7, 14, 14);
+        }
+    }
+
+    function loop(now) {
+        if (!game) return;
+        const dt = Math.max(0, Math.min(0.05, (now - game.last) / 1000));
+        game.last = now;
+        if (game.state === 'play') update(dt);
+        draw();
+        requestAnimationFrame(loop);
+    }
+})();
+</script>

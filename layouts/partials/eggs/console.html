@@ -1,0 +1,167 @@
+{{/* Dev console: press the key left of 1 (` on QWERTY, ² on AZERTY). Also the launcher for the other easter eggs. */}}
+{{ $posts := slice }}
+{{ range (where site.RegularPages "Section" "blog").ByDate.Reverse }}
+{{ $posts = $posts | append (dict "title" .Title "url" .RelPermalink "date" (.Date.Format "2006-01-02")) }}
+{{ end }}
+{{ $now := slice }}
+{{ with site.GetPage "/now" }}{{ range .Params.sidebar }}{{ $now = $now | append (. | markdownify | plainify) }}{{ end }}{{ end }}
+{{ $projects := slice }}
+{{ range site.Data.projects }}
+{{ $projects = $projects | append (dict "name" .name "url" (.url | default "") "description" (.description | markdownify | plainify)) }}
+{{ end }}
+<script type="application/json" id="console-data">{{ dict "posts" $posts "now" $now "projects" $projects "linkedin" site.Params.linkedin "github" site.Params.github | jsonify | safeJS }}</script>
+
+<div class="console" id="console" hidden>
+    <div class="console__out" aria-live="polite"></div>
+    <form class="console__line">
+        <label for="console-input">guest@benaissazaki:~$</label>
+        <input id="console-input" autocomplete="off" autocapitalize="off" spellcheck="false">
+    </form>
+</div>
+<script>
+(function () {
+    const root = document.getElementById('console');
+    const out = root.querySelector('.console__out');
+    const input = root.querySelector('input');
+    const data = JSON.parse(document.getElementById('console-data').textContent);
+    const history = [];
+    let cursor = 0;
+
+    function esc(s) {
+        return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+    }
+
+    function print(html, cls) {
+        const line = document.createElement('div');
+        if (cls) line.className = cls;
+        line.innerHTML = html;
+        out.appendChild(line);
+        out.scrollTop = out.scrollHeight;
+    }
+
+    function link(url, text) {
+        return '<a href="' + esc(url) + '">' + esc(text || url) + '</a>';
+    }
+
+    // Hide the console, then run another easter egg
+    function launch(name) {
+        return function () {
+            close();
+            window.eggs[name]();
+        };
+    }
+
+    const files = {
+        'about.txt': function () {
+            print('Zaki Benaissa. Freelance software engineer from Algeria, 6 years in.');
+            print('Web apps, websites, and the odd tool. Takes things apart for fun.');
+        },
+        'now.txt': function () {
+            data.now.forEach(function (n) { print('- ' + esc(n)); });
+            print('more: ' + link('/now/'));
+        },
+        'secrets.txt': function () {
+            print('things to try on this site:');
+            print('  ↑↑↓↓←→←→BA      a stealth mission (or type: sneak)');
+            print('  type 1999        party like it\'s 1999 (or type: 1999)');
+        }
+    };
+
+    const commands = {
+        help: function () {
+            print('available commands:');
+            print('  ls [blog|projects]   list things');
+            print('  cat &lt;file&gt;           read a file');
+            print('  whoami · date · hire · clear · exit');
+            print('psst: there\'s a file called secrets.txt');
+        },
+        ls: function (arg) {
+            if (arg === 'blog' || arg === 'blog/') {
+                data.posts.forEach(function (p) { print(esc(p.date) + '  ' + link(p.url, p.title)); });
+            } else if (arg === 'projects' || arg === 'projects/') {
+                data.projects.forEach(function (p) {
+                    print((p.url ? link(p.url, p.name) : '<b>' + esc(p.name) + '</b>') + '  <span class="console__dim">' + esc(p.description) + '</span>');
+                });
+            } else if (!arg) {
+                print('blog/  projects/  ' + Object.keys(files).join('  '));
+            } else {
+                print('ls: cannot access \'' + esc(arg) + '\': No such file or directory');
+            }
+        },
+        cat: function (arg) {
+            if (files[arg]) files[arg]();
+            else if (!arg) print('cat: which file? try: ls');
+            else print('cat: ' + esc(arg) + ': No such file or directory');
+        },
+        whoami: function () { print('guest. but you could be a client: type hire'); },
+        date: function () { print(new Date().toString()); },
+        hire: function () { print('excellent choice. say hi on ' + link(data.linkedin, 'LinkedIn') + ' and tell me about your project.'); },
+        sudo: function (arg) {
+            if (arg === 'hire zaki' || arg === 'hire') commands.hire();
+            else print('guest is not in the sudoers file. This incident will be reported.');
+        },
+        rm: function () { print('nice try.'); },
+        vim: function () { print('you are now stuck in vim. just kidding. type exit.'); },
+        github: function () { print(link(data.github)); },
+        clear: function () { out.innerHTML = ''; },
+        exit: function () { close(); },
+        sneak: launch('sneak'),
+        '1999': launch('retro')
+    };
+
+    function run(line) {
+        print('<span class="console__prompt">guest@benaissazaki:~$</span> ' + esc(line));
+        const parts = line.trim().split(/\s+/);
+        const cmd = parts.shift().toLowerCase();
+        if (!cmd) return;
+        if (commands[cmd]) commands[cmd](parts.join(' '));
+        else print(esc(cmd) + ': command not found. try: help');
+    }
+
+    function open() {
+        if (!root.hidden) return;
+        root.hidden = false;
+        if (!out.childElementCount) {
+            print('benaissazaki.space terminal, v6.0. type <b>help</b> to get started.', 'console__dim');
+        }
+        input.focus();
+    }
+
+    function close() {
+        root.hidden = true;
+        input.blur();
+    }
+
+    root.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const line = input.value;
+        input.value = '';
+        if (line.trim()) history.push(line);
+        cursor = history.length;
+        run(line);
+    });
+
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowUp' && cursor > 0) {
+            e.preventDefault();
+            input.value = history[--cursor];
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            cursor = Math.min(history.length, cursor + 1);
+            input.value = history[cursor] || '';
+        } else if (e.key === 'Escape' || e.code === 'Backquote') {
+            e.preventDefault();
+            close();
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        // Match the physical key left of 1, whatever the keyboard layout
+        if (e.code !== 'Backquote' || (e.target.closest && e.target.closest('input, textarea'))) return;
+        e.preventDefault();
+        open();
+    });
+
+    window.eggs.console = open;
+})();
+</script>

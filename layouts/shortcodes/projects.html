@@ -1,0 +1,9 @@
+<ul class="projects">
+    {{- range site.Data.projects }}
+    <li>
+        {{ if .url }}<a href="{{ .url }}">{{ .name }}</a>{{ else }}<strong>{{ .name }}</strong>{{ end }}
+        <p>{{ .description | markdownify }}</p>
+        {{ range .tags }}<span class="tag">{{ . }}</span>{{ end }}
+    </li>
+    {{- end }}
+</ul>

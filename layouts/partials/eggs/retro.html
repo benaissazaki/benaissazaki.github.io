@@ -1,0 +1,46 @@
+{{/* 1999 mode: type "1999", click the "best viewed any size" button, or type `1999` in the console. Lasts for the browser session. */}}
+<div class="retro-bar" id="retro-bar" hidden>
+    <div class="retro-bar__marquee" aria-hidden="true">
+        <span>★ WELCOME TO ZAKI'S HOME PAGE ★ best viewed in Netscape Navigator 4.0 at 800x600 ★ sign my guestbook (just kidding, I deleted it) ★ this site is Y2K compliant ★</span>
+    </div>
+    <div class="retro-bar__row">
+        <span class="retro-bar__counter">you are visitor #<b>000001</b></span>
+        <span class="retro-bar__construction">🚧 UNDER CONSTRUCTION 🚧</span>
+        <button type="button" class="retro-bar__exit">take me back to 2026</button>
+    </div>
+</div>
+<script>
+(function () {
+    const bar = document.getElementById('retro-bar');
+    const KEY = 'retro-1999';
+
+    function set(on) {
+        document.documentElement.classList.toggle('retro', on);
+        bar.hidden = !on;
+        try {
+            if (on) sessionStorage.setItem(KEY, '1');
+            else sessionStorage.removeItem(KEY);
+        } catch (e) { /* fine, it just won't stick across pages */ }
+    }
+
+    try {
+        if (sessionStorage.getItem(KEY)) set(true);
+    } catch (e) { /* no storage */ }
+
+    bar.querySelector('.retro-bar__exit').addEventListener('click', function () { set(false); });
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-egg="retro"]')) set(true);
+    });
+
+    // Typing 1999 anywhere outside a text field
+    let typed = '';
+    document.addEventListener('keydown', function (e) {
+        if (e.key.length !== 1 || (e.target.closest && e.target.closest('input, textarea'))) return;
+        typed = (typed + e.key).slice(-4);
+        if (typed === '1999') set(true);
+    });
+
+    window.eggs.retro = function () { set(true); };
+})();
+</script>

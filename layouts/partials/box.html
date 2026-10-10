@@ -1,0 +1,7 @@
+{{/* A retro title-bar box. Usage: {{ partial "box.html" (dict "title" "now.txt" "content" $html "class" "extra") }} */}}
+<section class="box {{ .class }}">
+    <h2 class="box__title"><span>{{ .title }}</span><span class="box__controls" aria-hidden="true">_ □ ×</span></h2>
+    <div class="box__body">
+        {{ .content }}
+    </div>
+</section>

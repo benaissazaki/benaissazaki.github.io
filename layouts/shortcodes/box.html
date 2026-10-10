@@ -1,0 +1,1 @@
+{{ partial "box.html" (dict "title" (.Get "title") "content" (.Inner | markdownify) "class" (.Get "class")) }}
