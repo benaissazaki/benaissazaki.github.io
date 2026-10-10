@@ -1,6 +1,7 @@
 ---
 title: WordPress Speed Checklist
 date: 2024-03-05T12:00:00Z
+emoji: "🚀"
 description: A checklist of best practices to speed up your WordPress website
 ---
 

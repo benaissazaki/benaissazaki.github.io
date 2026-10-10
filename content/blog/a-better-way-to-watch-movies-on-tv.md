@@ -1,6 +1,7 @@
 ---
 title: A better way to watch movies on TV
 date: 2023-06-18T12:00:00Z
+emoji: "📽️"
 description: Building a media server in Rust to share movies across a network
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: WordPress Security Checklist
 date: 2024-01-14T12:00:00Z
+emoji: "☑️"
 description: A checklist of best practices to secure your WordPress website
 ---
 

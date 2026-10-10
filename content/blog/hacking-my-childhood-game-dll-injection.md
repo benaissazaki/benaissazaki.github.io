@@ -1,6 +1,7 @@
 ---
 title: "Hacking my childhood game: DLL Injection"
 date: 2023-04-26T12:00:00Z
+emoji: "💉"
 description: Using DLL injection to change the behavior of Battle for Middle-Earth II
 ---
 
