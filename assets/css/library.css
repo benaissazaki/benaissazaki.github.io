@@ -1,0 +1,126 @@
+.library p {
+    max-width: 60ch;
+}
+
+.library-room {
+    position: relative;
+    margin: 0 -36px;
+    height: clamp(380px, 56vw, 620px);
+    background: var(--ink);
+    border-top: 2px solid var(--line);
+    border-bottom: 2px solid var(--line);
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+.library-room__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.library-room__loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 16px;
+    color: var(--sun);
+    font-family: var(--font-pixel);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.library-room__loading[hidden],
+.library-room__tip[hidden],
+.library-room__card[hidden] {
+    display: none;
+}
+
+.library-room.is-unsupported .library-room__canvas {
+    display: none;
+}
+
+.library-room__tip {
+    position: absolute;
+    transform: translate(14px, -130%);
+    padding: 2px 8px;
+    background: var(--ink);
+    color: var(--sun);
+    border: 2px solid var(--sun);
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.library-room__card {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: min(280px, calc(100% - 32px));
+    padding: 12px 14px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    box-shadow: 4px 4px 0 var(--accent);
+}
+
+.library-room__kind {
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+    color: var(--teal);
+    text-transform: uppercase;
+}
+
+.library-room__title {
+    margin: 4px 0 2px;
+    font-size: 1.15rem;
+}
+
+.library-room__meta,
+.library-room__note {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.library-room__note:empty {
+    display: none;
+}
+
+.library-room__hint {
+    margin: 8px 0;
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+}
+
+.library-room__back {
+    padding: 4px 12px;
+    background: var(--sun);
+    color: var(--ink);
+    border: 2px solid var(--line);
+    font-family: var(--font-pixel);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.library-credit {
+    margin: 1rem 0 0;
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+    .library-room {
+        margin: 0 -18px;
+        height: 125vw;
+    }
+
+    .library-room__card {
+        top: auto;
+        bottom: 12px;
+        right: 12px;
+    }
+}

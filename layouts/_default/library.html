@@ -1,0 +1,43 @@
+{{ define "styles" }}
+{{ $css := resources.Get "css/library.css" | resources.Minify }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{ end }}
+
+{{ define "main" }}
+{{ $kinds := slice (dict "key" "books" "label" "Books" "verb" "read") (dict "key" "games" "label" "Video games" "verb" "played") (dict "key" "movies" "label" "Movies" "verb" "watched") }}
+{{ $data := dict }}
+{{ range $kinds }}
+{{ $items := slice }}
+{{ range index site.Data.library .key }}
+{{ $item := merge . (dict "cover" "" "aspect" 0) }}
+{{ with .cover }}
+{{ $img := imageConfig (printf "static/img/library/%s" .) }}
+{{ $item = merge $item (dict "cover" (printf "img/library/%s" . | relURL) "aspect" (div (float $img.Height) $img.Width)) }}
+{{ end }}
+{{ $items = $items | append $item }}
+{{ end }}
+{{ $data = merge $data (dict .key $items) }}
+{{ end }}
+
+<div class="page-content library">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+</div>
+
+<div class="library-room" id="library-room">
+    <canvas class="library-room__canvas" aria-hidden="true"></canvas>
+    <p class="library-room__loading">loading the room…</p>
+    <div class="library-room__tip" hidden></div>
+    <aside class="library-room__card" hidden aria-live="polite">
+        <span class="library-room__kind"></span>
+        <h2 class="library-room__title"></h2>
+        <p class="library-room__meta"></p>
+        <p class="library-room__note"></p>
+        <p class="library-room__hint">drag to turn it over · Esc or click away to put it back</p>
+        <button type="button" class="library-room__back">put it back</button>
+    </aside>
+</div>
+<script type="application/json" id="library-data">{{ $data | jsonify | safeJS }}</script>
+{{ $js := resources.Get "js/library.js" | resources.Minify }}
+<script type="module" src="{{ $js.RelPermalink }}"></script>
+{{ end }}

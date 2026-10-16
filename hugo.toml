@@ -33,3 +33,7 @@ enableRobotsTXT = true
     name = 'uses'
     url = '/uses/'
     weight = 4
+  [[menus.main]]
+    name = 'library'
+    url = '/library/'
+    weight = 5
