@@ -42,11 +42,11 @@
     {{ partial "eggs/retro.html" . }}
     <div class="page">
         {{ partial "header.html" . }}
-        <div class="layout">
+        <div class="layout{{ if .Params.wide }} layout--wide{{ end }}">
             <main id="content">
                 {{ block "main" . }}{{ end }}
             </main>
-            {{ partial "sidebar.html" . }}
+            {{ if not .Params.wide }}{{ partial "sidebar.html" . }}{{ end }}
         </div>
         {{ partial "footer.html" . }}
     </div>

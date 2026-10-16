@@ -1,0 +1,146 @@
+# The /library page: a 3D room with a shelf per kind.
+# cover:  optional image in static/img/library/ (otherwise a cover is drawn in the site's style);
+#         books are from Open Library, games and movies from their Wikipedia articles
+#         (The Finals has no box art: game-finals.jpg is its public-domain logo on a made-up cover)
+# color:  spine / cover colour   motif: emoji drawn on generated covers
+# note:   your comment, shown on the back cover and the card when the item is picked up
+
+books:
+  - title: The Lord of the Rings
+    by: J.R.R. Tolkien
+    year: 1954
+    cover: book-lotr.jpg
+    color: "#7a1f1f"
+    note: "Read it sooo many times, still as enjoyable as the first time."
+  - title: The Hobbit
+    by: J.R.R. Tolkien
+    year: 1937
+    cover: book-hobbit.jpg
+    color: "#2f6b4f"
+    note: "Adventure, humor, emotions, moral...The gold standard for kids' books."
+  - title: The Hound of the Baskervilles
+    by: Arthur Conan Doyle
+    year: 1902
+    cover: book-baskervilles.jpg
+    color: "#a8231d"
+    note: "All Sherlock Holmes books belong here, but this one is the best."
+  - title: The Shining
+    by: Stephen King
+    year: 1977
+    cover: book-shining.jpg
+    color: "#1c2a5c"
+    note: "The book that made me realize that characters on paper can be as scary as a movie."
+  - title: Notre-Dame de Paris
+    by: Victor Hugo
+    year: 1831
+    cover: book-notre-dame.jpg
+    color: "#1f2b4a"
+    note: "Probably the best book in french literature."
+  - title: Journey to the West
+    by: Wu Cheng'en
+    year: 1592
+    cover: book-journey-west.jpg
+    color: "#c9a227"
+    note: "Reading in progress..."
+
+games:
+  - title: Resident Evil 4
+    cover: game-re4.jpg
+    by: Capcom
+    year: 2023
+    platform: PC
+    color: "#5a1414"
+    note: "My favourite action-oriented Resident Evil and probably my favourite overall."
+    motif: "🔪"
+  - title: The Finals
+    cover: game-finals.jpg
+    by: Embark Studios
+    year: 2023
+    platform: PC
+    color: "#e8442c"
+    note: "Never thought I'd have this much fun in a competitive FPS."
+    motif: "💥"
+  - title: The Mummy
+    cover: game-mummy.jpg
+    by: Rebellion
+    year: 2000
+    platform: PS1
+    color: "#b8862b"
+    note: "Obscure childhood game that used to scare me to death, recently replayed it and it still does."
+    motif: "🏺"
+  - title: Devil May Cry 3
+    cover: game-dmc3.jpg
+    by: Capcom
+    year: 2005
+    platform: PS2
+    color: "#6b0f1a"
+    note: "If coolness was a video game, (Excellent OST)."
+    motif: "😈"
+  - title: "Metal Gear Rising: Revengeance"
+    cover: game-mgrr.jpg
+    by: PlatinumGames
+    year: 2013
+    platform: PS3
+    color: "#2b2f36"
+    note: "Over the top, cheesy, and extrememly satisfying combat."
+    motif: "⚡"
+  - title: Resident Evil 2
+    cover: game-re2.jpg
+    by: Capcom
+    year: 2019
+    platform: PS4
+    color: "#24324a"
+    note: "My favorite survival horrorg game of the franchise (the OG RE1 on PSX is probably scarier but overall I prefer this one)."
+    motif: "🧟"
+  - title: Resident Evil Requiem
+    cover: game-re9.jpg
+    by: Capcom
+    year: 2026
+    platform: PS5
+    color: "#3a1f3f"
+    note: "Brillantly mixed a lot of elements from the entire saga, could have been my favourite if not for the weak writing."
+    motif: "🕯️"
+
+movies:
+  - title: The Lord of the Rings
+    cover: movie-lotr.jpg
+    by: Peter Jackson
+    year: 2001
+    color: "#3b2a14"
+    note: "Watched it soooo many times, I can probably recite the script."
+    motif: "💍"
+  - title: The Good, the Bad and the Ugly
+    cover: movie-gbu.jpg
+    by: Sergio Leone
+    year: 1966
+    color: "#c2662d"
+    note: "Sergio Leone mastered the cinematographic language so much that you almost can watch it without dialogue."
+    motif: "🤠"
+  - title: Yojimbo
+    cover: movie-yojimbo.jpg
+    by: Akira Kurosawa
+    year: 1961
+    color: "#222222"
+    note: "Who knew that the land of the Rising Sun could make good Westerns?"
+    motif: "⚔️"
+  - title: Once Upon a Time in the West
+    cover: movie-ouatitw.jpg
+    by: Sergio Leone
+    year: 1968
+    color: "#8c3b1e"
+    note: "As masterfully crafted as The Good, The Bad and The Ugly with a touch of epic and romantism."
+    motif: "🚂"
+  - title: Rocky
+    cover: movie-rocky.jpg
+    by: John G. Avildsen
+    year: 1976
+    color: "#9e1b1b"
+    note: "Grounded, raw and everyone can relate to it to some degree"
+    motif: "🥊"
+  - title: Predator
+    cover: movie-predator.jpg
+    by: John McTiernan
+    year: 1987
+    color: "#2e4a1e"
+    note: "There is something in those trees..."
+    motif: "🎯"
