@@ -4,6 +4,7 @@
 #         (The Finals has no box art: game-finals.jpg is its public-domain logo on a made-up cover)
 # color:  spine / cover color motif: emoji drawn on generated covers
 # note:   your comment, shown on the back cover and the card when the item is picked up
+# current: true moves it off its shelf onto the "now" table (things you're reading, playing or watching)
 
 books:
   - title: The Lord of the Rings
@@ -39,6 +40,7 @@ books:
   - title: Journey to the West
     by: Wu Cheng'en
     year: 1592
+    current: true
     cover: book-journey-west.jpg
     color: "#c9a227"
     note: "Reading in progress..."
@@ -143,7 +145,7 @@ movies:
     by: Akira Kurosawa
     year: 1961
     color: "#222222"
-    note: "Who knew that the land of the Rising Sun could make good Westerns?"
+    note: "Who knew that the Easy could make good Westerns?"
     motif: "⚔️"
   - title: Once Upon a Time in the West
     cover: movie-ouatitw.jpg
