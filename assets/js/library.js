@@ -103,21 +103,40 @@ function frontCover(item, kind) {
     });
 }
 
-function backCover(item) {
-    return canvasTexture(256, 360, function (ctx, w, h) {
-        ctx.fillStyle = shade(item.color, -0.08);
+function backCover(item, aspect) {
+    // drawn at the face's own proportions so the text isn't stretched; everything wraps and the
+    // note shrinks until it fits above the barcode
+    return canvasTexture(256, Math.round(256 * aspect), function (ctx, w, h) {
+        const x0 = 16, maxW = w - 32;
+        const bg = shade(item.color, -0.08);
+        // light covers get dark ink so the text stays readable
+        const c = new THREE.Color(bg).getRGB({}, THREE.SRGBColorSpace);
+        const light = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b > 0.45;
+        const ink = light ? C.ink : C.paper, accent = light ? '#3d1a00' : C.sun;
+        ctx.fillStyle = bg;
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = C.paper;
+        let y = 38;
+        ctx.fillStyle = ink;
         ctx.font = '20px ' + PIXEL_FONT;
-        wrap(ctx, item.title, w - 32).slice(0, 3).forEach(function (l, i) { ctx.fillText(l, 16, 40 + i * 24); });
-        ctx.fillStyle = C.sun;
+        wrap(ctx, item.title, maxW).forEach(function (l) { ctx.fillText(l, x0, y); y += 24; });
+        y += 6;
+        ctx.fillStyle = accent;
         ctx.font = '15px ' + PIXEL_FONT;
-        ctx.fillText(item.by + ' · ' + item.year, 16, 124);
-        ctx.fillStyle = C.paper;
-        ctx.font = '14px ' + PIXEL_FONT;
-        wrap(ctx, item.note || '', w - 32).slice(0, 6).forEach(function (l, i) {
-            ctx.fillText(l, 16, 160 + i * 20);
-        });
+        wrap(ctx, item.by + ' · ' + item.year, maxW).forEach(function (l) { ctx.fillText(l, x0, y); y += 19; });
+        y += 14;
+        const bottom = h - 82;
+        if (item.note) {
+            let size = 15, lines;
+            for (;;) {
+                ctx.font = size + 'px ' + PIXEL_FONT;
+                lines = wrap(ctx, item.note, maxW);
+                if (y + lines.length * (size + 7) <= bottom || size <= 9) break;
+                size -= 1;
+            }
+            const lh = size + 7;
+            ctx.fillStyle = ink;
+            lines.forEach(function (l) { ctx.fillText(l, x0, y); y += lh; });
+        }
         // a fake barcode, because every back cover has one
         ctx.fillStyle = C.paper;
         ctx.fillRect(w - 110, h - 70, 94, 54);
@@ -131,9 +150,9 @@ function backCover(item) {
             x += bar + 1 + (seed % 2);
         }
         ctx.font = '11px ' + PIXEL_FONT;
-        ctx.fillStyle = C.paper;
-        ctx.fillText('benaissazaki.space', 16, h - 40);
-        ctx.fillText('/library', 16, h - 24);
+        ctx.fillStyle = ink;
+        ctx.fillText('benaissazaki.space', x0, h - 40);
+        ctx.fillText('/library', x0, h - 24);
     });
 }
 
@@ -170,11 +189,22 @@ function hash(s) {
 
 const loader = new THREE.TextureLoader();
 
-function imageMaterial(url, fallback) {
+// `aspect` (height / width of the face it goes on) crops the image to fill it, like object-fit: cover
+function imageMaterial(url, fallback, aspect) {
     const mat = new THREE.MeshLambertMaterial({ map: fallback });
     loader.load(url, function (tex) {
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        if (aspect) {
+            const img = tex.image.height / tex.image.width;
+            if (img > aspect) {
+                tex.repeat.y = aspect / img;
+                tex.offset.y = (1 - tex.repeat.y) / 2;
+            } else {
+                tex.repeat.x = img / aspect;
+                tex.offset.x = (1 - tex.repeat.x) / 2;
+            }
+        }
         mat.map = tex;
         mat.needsUpdate = true;
     });
@@ -189,12 +219,13 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(C.ink);
 const camera = new THREE.PerspectiveCamera(40, 1, 0.05, 20);
 const LOOK = new THREE.Vector3(0, 0.66, 0);
+let frameX = 0;
 
 const hemi = new THREE.HemisphereLight(0xfff4e0, 0x404860, 1.9);
 const key = new THREE.DirectionalLight(0xffffff, 1.1);
 key.position.set(0.8, 2, 2.5);
 const lamp = new THREE.PointLight(0xffc27a, 2.2, 4, 1.5);
-lamp.position.set(1.04, 1.35, 0.4);
+lamp.position.set(1.14, 1.35, 0.1);
 scene.add(hemi, key, lamp);
 
 function box(w, h, d, material, x, y, z) {
@@ -269,7 +300,7 @@ for (let i = 0; i < 4; i++) {
     shelfFloor.push(y + T / 2);
 }
 
-function plate(text, y) {
+function plate(text, y, x, z) {
     const tex = canvasTexture(128, 32, function (ctx, w, h) {
         ctx.fillStyle = '#c9a227';
         ctx.fillRect(0, 0, w, h);
@@ -283,7 +314,7 @@ function plate(text, y) {
         ctx.textBaseline = 'middle';
         ctx.fillText(text, w / 2, h / 2 + 1);
     });
-    box(0.16, 0.04, 0.004, lambert({ map: tex }), 0, y, DEPTH / 2 + 0.003);
+    box(0.16, 0.04, 0.004, lambert({ map: tex }), x || 0, y, z === undefined ? DEPTH / 2 + 0.003 : z);
 }
 plate('MOVIES', shelfFloor[0] - T / 2);
 plate('GAMES', shelfFloor[1] - T / 2);
@@ -304,12 +335,12 @@ const sign = canvasTexture(256, 64, function (ctx, w, h) {
 });
 box(0.62, 0.155, 0.02, lambert({ map: sign, emissive: 0x332200 }), 0, CASE_H + BASE + 0.16, -0.19);
 
-// floor lamp
-box(0.02, 1.3, 0.02, lambert({ color: C.ink }), 1.04, 0.65, 0.35);
-box(0.24, 0.02, 0.24, lambert({ color: C.ink }), 1.04, 0.01, 0.35);
+// floor lamp, standing behind the table
+box(0.02, 1.3, 0.02, lambert({ color: C.ink }), 1.14, 0.65, -0.12);
+box(0.18, 0.02, 0.18, lambert({ color: C.ink }), 1.14, 0.01, -0.12);
 const shade3 = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.17, 0.2, 8, 1, true),
     lambert({ color: C.sun, emissive: 0x996a10, side: THREE.DoubleSide }));
-shade3.position.set(1.04, 1.38, 0.35);
+shade3.position.set(1.14, 1.38, -0.12);
 scene.add(shade3);
 
 // a snake plant in a terracotta pot
@@ -357,21 +388,36 @@ function addItem(mesh, item, kind, index) {
     items.push(mesh);
 }
 
-// books stand spine-out; the front cover is the +x face
+// every book is the same size, every game and movie comes in the same case; covers are cropped to fit.
+// A book's front cover is its +x face and its spine +z; a case's front is +z and its spine -x.
+const BOOK = { W: 0.17, h: 0.26, t: 0.05 };
+const CASE = { games: [0.135, 0.17], movies: [0.135, 0.19] };
+
+function bookMesh(b) {
+    const W = BOOK.W, h = BOOK.h, t = BOOK.t;
+    const front = b.cover ? imageMaterial(b.cover, frontCover(b, 'books'), h / W) : lambert({ map: frontCover(b, 'books') });
+    const pages = lambert({ map: pagesTexture });
+    const mats = [front, lambert({ map: backCover(b, h / W) }), pages, pages, lambert({ map: spine(b, 48, 320, 22) }), pages];
+    return new THREE.Mesh(new THREE.BoxGeometry(t, h, W), mats);
+}
+
+function caseMesh(g, kind, w, h) {
+    const front = g.cover ? imageMaterial(g.cover, frontCover(g, kind), h / w) : lambert({ map: frontCover(g, kind) });
+    const edge = lambert({ color: shade(g.color, -0.1) });
+    const mats = [edge, lambert({ map: spine(g, 24, 280, 14) }), edge, edge, front, lambert({ map: backCover(g, h / w) })];
+    return new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.014), mats);
+}
+
+const onShelf = function (item) { return !item.current; };
+
+// books stand spine-out
 (function () {
-    const W = 0.17;
-    const list = data.books;
-    const thick = list.map(function (b) { return 0.04 + (hash(b.title) % 25) / 1000; });
-    const total = thick.reduce(function (a, b) { return a + b + 0.004; }, 0);
+    const W = BOOK.W, h = BOOK.h, t = BOOK.t;
+    const list = data.books.filter(onShelf);
+    const total = list.length * (t + 0.004);
     let x = -0.42 - total / 2;
     list.forEach(function (b, i) {
-        const h = b.aspect ? Math.min(0.3, W * b.aspect) : 0.25 + (hash(b.by + b.title) % 35) / 1000;
-        const t = thick[i];
-        const back = backCover(b);
-        const front = b.cover ? imageMaterial(b.cover, frontCover(b, 'books')) : lambert({ map: frontCover(b, 'books') });
-        const pages = lambert({ map: pagesTexture });
-        const mats = [front, lambert({ map: back }), pages, pages, lambert({ map: spine(b, 48, 320, 22) }), pages];
-        const m = new THREE.Mesh(new THREE.BoxGeometry(t, h, W), mats);
+        const m = bookMesh(b);
         m.position.set(x + t / 2, shelfFloor[2] + h / 2, FRONT - W / 2);
         x += t + 0.004;
         addItem(m, b, 'books', i);
@@ -400,29 +446,64 @@ function addItem(mesh, item, kind, index) {
 // games and movies stand face-out, leaning back a little; the front is the +z face
 function caseRow(list, kind, shelf) {
     const gap = 0.022;
-    const sizes = list.map(function (g) {
-        // real covers set the case's proportions so they aren't stretched
-        if (g.aspect) return [0.135, Math.min(0.205, 0.135 * g.aspect)];
-        if (g.platform === 'PS1') return [0.142, 0.124];
-        if (g.platform === 'PS5') return [0.135, 0.17];
-        return [0.135, 0.19];
-    });
-    const total = sizes.reduce(function (a, s) { return a + s[0] + gap; }, -gap);
+    const sizes = list.map(function () { return CASE[kind]; });
+    // a full shelf shrinks its cases a little rather than spilling past the sides
+    const room = CASE_W - 2 * T - 0.04;
+    const fit = Math.min(1, room / sizes.reduce(function (a, s) { return a + s[0] + gap; }, -gap));
+    const total = sizes.reduce(function (a, s) { return a + s[0] + gap; }, -gap) * fit;
     let x = -total / 2;
     list.forEach(function (g, i) {
-        const w = sizes[i][0], h = sizes[i][1], d = 0.014;
-        const front = g.cover ? imageMaterial(g.cover, frontCover(g, kind)) : lambert({ map: frontCover(g, kind) });
-        const edge = lambert({ color: shade(g.color, -0.1) });
-        const mats = [edge, lambert({ map: spine(g, 24, 280, 14) }), edge, edge, front, lambert({ map: backCover(g) })];
-        const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mats);
+        const w = sizes[i][0] * fit, h = sizes[i][1] * fit;
+        const m = caseMesh(g, kind, w, h);
         m.rotation.x = -0.12;
         m.position.set(x + w / 2, shelfFloor[shelf] + h / 2 * Math.cos(0.12), FRONT - 0.05 - h / 2 * Math.sin(0.12));
-        x += w + gap;
+        x += w + gap * fit;
         addItem(m, g, kind, i);
     });
 }
-caseRow(data.games, 'games', 1);
-caseRow(data.movies, 'movies', 0);
+caseRow(data.games.filter(onShelf), 'games', 1);
+caseRow(data.movies.filter(onShelf), 'movies', 0);
+
+// the "now" table: whatever is in progress (`current: true`) lies on it, stacked a little askew
+(function () {
+    const TX = 0.93, TZ = 0.1, TOP = 0.42, TW = 0.34;
+    box(TW, 0.03, TW, WOOD, TX, TOP - 0.015, TZ);
+    box(TW - 0.04, 0.05, 0.02, WOOD_DARK, TX, TOP - 0.055, TZ + TW / 2 - 0.03);
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (c) {
+        box(0.025, TOP - 0.03, 0.025, WOOD_DARK, TX + c[0] * (TW / 2 - 0.03), (TOP - 0.03) / 2, TZ + c[1] * (TW / 2 - 0.03));
+    });
+    plate('NOW', TOP - 0.055, TX, TZ + TW / 2 - 0.017);
+
+    // a mug, because every desk has one
+    const mug = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.03, 0.08, 10), lambert({ color: C.accent }));
+    mug.position.set(TX + 0.11, TOP + 0.04, TZ - 0.09);
+    const handle = new THREE.Mesh(new THREE.TorusGeometry(0.02, 0.006, 6, 10), lambert({ color: C.accent }));
+    handle.position.set(TX + 0.145, TOP + 0.04, TZ - 0.09);
+    scene.add(mug, handle);
+
+    let y = TOP;
+    ['books', 'games', 'movies'].forEach(function (kind) {
+        data[kind].forEach(function (item, i) {
+            if (!item.current) return;
+            const n = items.filter(function (m) { return m.userData.current; }).length;
+            const yaw = n % 2 ? 0.2 : -0.14;
+            let m, thick;
+            if (kind === 'books') {
+                m = bookMesh(item);
+                m.rotation.set(0, yaw, Math.PI / 2, 'YXZ');   // lying on its back cover, spine towards you
+                thick = BOOK.t;
+            } else {
+                m = caseMesh(item, kind, CASE[kind][0], CASE[kind][1]);
+                m.rotation.set(-Math.PI / 2, yaw, 0, 'YXZ');  // face up
+                thick = 0.014;
+            }
+            m.position.set(TX - 0.03 + (n % 2) * 0.03, y + thick / 2, TZ + 0.01);
+            y += thick + 0.002;
+            addItem(m, item, kind, i);
+            m.userData.current = true;
+        });
+    });
+})();
 
 /* ---------- inspecting ---------- */
 
@@ -446,6 +527,7 @@ let anim = null;
 let drag = null;
 let spin = { x: 0, y: 0 };
 const KIND_LABEL = { books: 'Book', games: 'Video game', movies: 'Movie' };
+const NOW_LABEL = { books: 'now reading', games: 'now playing', movies: 'now watching' };
 
 function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
@@ -467,7 +549,8 @@ function pickUp(mesh) {
     const pose = inspectPose(mesh);
     anim = { mesh: mesh, from: mesh.position.clone(), fromQ: mesh.quaternion.clone(), to: pose.pos, toQ: pose.quat, t: 0, dim: 0.6 };
     const it = mesh.userData.item;
-    card.querySelector('.library-room__kind').textContent = KIND_LABEL[mesh.userData.kind] + (it.platform ? ' · ' + it.platform : '');
+    card.querySelector('.library-room__kind').textContent = KIND_LABEL[mesh.userData.kind] + (it.platform ? ' · ' + it.platform : '') +
+        (it.current ? ' · ' + NOW_LABEL[mesh.userData.kind] : '');
     card.querySelector('.library-room__title').textContent = it.title;
     card.querySelector('.library-room__meta').textContent = it.by + ', ' + it.year;
     card.querySelector('.library-room__note').textContent = it.note || '';
@@ -542,8 +625,10 @@ function resize() {
     camera.aspect = w / h;
     // back off until the whole bookcase (and a bit of room) fits
     const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    // on narrow screens frame just the bookcase; on wide ones show the lamp and plant too
-    camera.position.z = Math.max(0.82 / tan, (camera.aspect < 1 ? 0.78 : 1.45) / (tan * camera.aspect));
+    // on narrow screens frame the bookcase and the table; on wide ones the lamp and plant too
+    frameX = camera.aspect < 1 ? 0.24 : 0;
+    LOOK.x = frameX;
+    camera.position.z = Math.max(0.82 / tan, (camera.aspect < 1 ? 0.96 : 1.45) / (tan * camera.aspect));
     camera.updateProjectionMatrix();
 }
 new ResizeObserver(resize).observe(root);
@@ -557,7 +642,7 @@ function frame() {
 
     if (!held) {
         parallax.lerp(pointer.x > 2 ? new THREE.Vector2() : pointer, 0.05);
-        camera.position.x = parallax.x * 0.12;
+        camera.position.x = frameX + parallax.x * 0.12;
         camera.position.y = 0.72 + parallax.y * 0.06;
         camera.lookAt(LOOK);
     }
