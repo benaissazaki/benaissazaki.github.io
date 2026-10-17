@@ -9,11 +9,8 @@
 {{ range $kinds }}
 {{ $items := slice }}
 {{ range index site.Data.library .key }}
-{{ $item := merge . (dict "cover" "" "aspect" 0) }}
-{{ with .cover }}
-{{ $img := imageConfig (printf "static/img/library/%s" .) }}
-{{ $item = merge $item (dict "cover" (printf "img/library/%s" . | relURL) "aspect" (div (float $img.Height) $img.Width)) }}
-{{ end }}
+{{ $item := merge . (dict "cover" "") }}
+{{ with .cover }}{{ $item = merge $item (dict "cover" (printf "img/library/%s" . | relURL)) }}{{ end }}
 {{ $items = $items | append $item }}
 {{ end }}
 {{ $data = merge $data (dict .key $items) }}

@@ -1,8 +1,8 @@
 # The /library page: a 3D room with a shelf per kind.
 # cover:  optional image in static/img/library/ (otherwise a cover is drawn in the site's style);
-#         books are from Open Library, games and movies from their Wikipedia articles
+#         books are from Open Library, games, movies and Lucky Luke from their Wikipedia articles
 #         (The Finals has no box art: game-finals.jpg is its public-domain logo on a made-up cover)
-# color:  spine / cover colour   motif: emoji drawn on generated covers
+# color:  spine / cover color motif: emoji drawn on generated covers
 # note:   your comment, shown on the back cover and the card when the item is picked up
 
 books:
@@ -42,6 +42,12 @@ books:
     cover: book-journey-west.jpg
     color: "#c9a227"
     note: "Reading in progress..."
+  - title: Lucky Luke
+    by: Morris
+    year: 1946
+    cover: book-luckyluke.jpg
+    color: "#c8382a"
+    note: "The original comics got me into reading, and I still pick them up now and then."
 
 games:
   - title: Resident Evil 4
@@ -82,7 +88,7 @@ games:
     year: 2013
     platform: PS3
     color: "#2b2f36"
-    note: "Over the top, cheesy, and extrememly satisfying combat."
+    note: "Over the top, cheesy, and extremely satisfying combat."
     motif: "⚡"
   - title: Resident Evil 2
     cover: game-re2.jpg
@@ -90,7 +96,7 @@ games:
     year: 2019
     platform: PS4
     color: "#24324a"
-    note: "My favorite survival horrorg game of the franchise (the OG RE1 on PSX is probably scarier but overall I prefer this one)."
+    note: "My favorite survival horror game of the franchise (the OG RE1 on PSX is probably scarier but overall I prefer this one)."
     motif: "🧟"
   - title: Resident Evil Requiem
     cover: game-re9.jpg
@@ -98,8 +104,24 @@ games:
     year: 2026
     platform: PS5
     color: "#3a1f3f"
-    note: "Brillantly mixed a lot of elements from the entire saga, could have been my favourite if not for the weak writing."
+    note: "Brilliantly mixed a lot of elements from the entire saga, could have been my favourite if not for the weak writing."
     motif: "🕯️"
+  - title: Rocket League
+    cover: game-rocketleague.jpg
+    by: Psyonix
+    year: 2015
+    platform: PC
+    color: "#1d5fbf"
+    note: "I never raged while playing a game, until I played this."
+    motif: "🚗"
+  - title: God of War
+    cover: game-gow.jpg
+    by: Santa Monica Studio
+    year: 2005
+    platform: PS2
+    color: "#8a1a12"
+    note: "The second one is objectively better, but there is something unique about this one."
+    motif: "⚔️"
 
 movies:
   - title: The Lord of the Rings
@@ -128,7 +150,7 @@ movies:
     by: Sergio Leone
     year: 1968
     color: "#8c3b1e"
-    note: "As masterfully crafted as The Good, The Bad and The Ugly with a touch of epic and romantism."
+    note: "As masterfully crafted as The Good, The Bad and The Ugly with a touch of epic and romanticism."
     motif: "🚂"
   - title: Rocky
     cover: movie-rocky.jpg
@@ -144,3 +166,17 @@ movies:
     color: "#2e4a1e"
     note: "There is something in those trees..."
     motif: "🎯"
+  - title: Oldboy
+    cover: movie-oldboy.jpg
+    by: Park Chan-wook
+    year: 2003
+    color: "#1c1c1c"
+    note: "So good that it sent me into the Korean cinema rabbit hole for a year."
+    motif: "🔨"
+  - title: The Mummy
+    cover: movie-mummy.jpg
+    by: Stephen Sommers
+    year: 1999
+    color: "#a8742c"
+    note: "Childhood movie that is still one of the best action/adventure movies."
+    motif: "🏺"

@@ -103,21 +103,40 @@ function frontCover(item, kind) {
     });
 }
 
-function backCover(item) {
-    return canvasTexture(256, 360, function (ctx, w, h) {
-        ctx.fillStyle = shade(item.color, -0.08);
+function backCover(item, aspect) {
+    // drawn at the face's own proportions so the text isn't stretched; everything wraps and the
+    // note shrinks until it fits above the barcode
+    return canvasTexture(256, Math.round(256 * aspect), function (ctx, w, h) {
+        const x0 = 16, maxW = w - 32;
+        const bg = shade(item.color, -0.08);
+        // light covers get dark ink so the text stays readable
+        const c = new THREE.Color(bg).getRGB({}, THREE.SRGBColorSpace);
+        const light = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b > 0.45;
+        const ink = light ? C.ink : C.paper, accent = light ? '#3d1a00' : C.sun;
+        ctx.fillStyle = bg;
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = C.paper;
+        let y = 38;
+        ctx.fillStyle = ink;
         ctx.font = '20px ' + PIXEL_FONT;
-        wrap(ctx, item.title, w - 32).slice(0, 3).forEach(function (l, i) { ctx.fillText(l, 16, 40 + i * 24); });
-        ctx.fillStyle = C.sun;
+        wrap(ctx, item.title, maxW).forEach(function (l) { ctx.fillText(l, x0, y); y += 24; });
+        y += 6;
+        ctx.fillStyle = accent;
         ctx.font = '15px ' + PIXEL_FONT;
-        ctx.fillText(item.by + ' · ' + item.year, 16, 124);
-        ctx.fillStyle = C.paper;
-        ctx.font = '14px ' + PIXEL_FONT;
-        wrap(ctx, item.note || '', w - 32).slice(0, 6).forEach(function (l, i) {
-            ctx.fillText(l, 16, 160 + i * 20);
-        });
+        wrap(ctx, item.by + ' · ' + item.year, maxW).forEach(function (l) { ctx.fillText(l, x0, y); y += 19; });
+        y += 14;
+        const bottom = h - 82;
+        if (item.note) {
+            let size = 15, lines;
+            for (;;) {
+                ctx.font = size + 'px ' + PIXEL_FONT;
+                lines = wrap(ctx, item.note, maxW);
+                if (y + lines.length * (size + 7) <= bottom || size <= 9) break;
+                size -= 1;
+            }
+            const lh = size + 7;
+            ctx.fillStyle = ink;
+            lines.forEach(function (l) { ctx.fillText(l, x0, y); y += lh; });
+        }
         // a fake barcode, because every back cover has one
         ctx.fillStyle = C.paper;
         ctx.fillRect(w - 110, h - 70, 94, 54);
@@ -131,9 +150,9 @@ function backCover(item) {
             x += bar + 1 + (seed % 2);
         }
         ctx.font = '11px ' + PIXEL_FONT;
-        ctx.fillStyle = C.paper;
-        ctx.fillText('benaissazaki.space', 16, h - 40);
-        ctx.fillText('/library', 16, h - 24);
+        ctx.fillStyle = ink;
+        ctx.fillText('benaissazaki.space', x0, h - 40);
+        ctx.fillText('/library', x0, h - 24);
     });
 }
 
@@ -170,11 +189,22 @@ function hash(s) {
 
 const loader = new THREE.TextureLoader();
 
-function imageMaterial(url, fallback) {
+// `aspect` (height / width of the face it goes on) crops the image to fill it, like object-fit: cover
+function imageMaterial(url, fallback, aspect) {
     const mat = new THREE.MeshLambertMaterial({ map: fallback });
     loader.load(url, function (tex) {
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        if (aspect) {
+            const img = tex.image.height / tex.image.width;
+            if (img > aspect) {
+                tex.repeat.y = aspect / img;
+                tex.offset.y = (1 - tex.repeat.y) / 2;
+            } else {
+                tex.repeat.x = img / aspect;
+                tex.offset.x = (1 - tex.repeat.x) / 2;
+            }
+        }
         mat.map = tex;
         mat.needsUpdate = true;
     });
@@ -359,16 +389,14 @@ function addItem(mesh, item, kind, index) {
 
 // books stand spine-out; the front cover is the +x face
 (function () {
-    const W = 0.17;
+    // every book is the same size; covers are cropped to fit
+    const W = 0.17, h = 0.26, t = 0.05;
     const list = data.books;
-    const thick = list.map(function (b) { return 0.04 + (hash(b.title) % 25) / 1000; });
-    const total = thick.reduce(function (a, b) { return a + b + 0.004; }, 0);
+    const total = list.length * (t + 0.004);
     let x = -0.42 - total / 2;
     list.forEach(function (b, i) {
-        const h = b.aspect ? Math.min(0.3, W * b.aspect) : 0.25 + (hash(b.by + b.title) % 35) / 1000;
-        const t = thick[i];
-        const back = backCover(b);
-        const front = b.cover ? imageMaterial(b.cover, frontCover(b, 'books')) : lambert({ map: frontCover(b, 'books') });
+        const back = backCover(b, h / W);
+        const front = b.cover ? imageMaterial(b.cover, frontCover(b, 'books'), h / W) : lambert({ map: frontCover(b, 'books') });
         const pages = lambert({ map: pagesTexture });
         const mats = [front, lambert({ map: back }), pages, pages, lambert({ map: spine(b, 48, 320, 22) }), pages];
         const m = new THREE.Mesh(new THREE.BoxGeometry(t, h, W), mats);
@@ -400,24 +428,23 @@ function addItem(mesh, item, kind, index) {
 // games and movies stand face-out, leaning back a little; the front is the +z face
 function caseRow(list, kind, shelf) {
     const gap = 0.022;
-    const sizes = list.map(function (g) {
-        // real covers set the case's proportions so they aren't stretched
-        if (g.aspect) return [0.135, Math.min(0.205, 0.135 * g.aspect)];
-        if (g.platform === 'PS1') return [0.142, 0.124];
-        if (g.platform === 'PS5') return [0.135, 0.17];
-        return [0.135, 0.19];
-    });
-    const total = sizes.reduce(function (a, s) { return a + s[0] + gap; }, -gap);
+    // every game comes in the same case, every movie in the same DVD case; covers are cropped to fit
+    const size = kind === 'games' ? [0.135, 0.17] : [0.135, 0.19];
+    const sizes = list.map(function () { return size; });
+    // a full shelf shrinks its cases a little rather than spilling past the sides
+    const room = CASE_W - 2 * T - 0.04;
+    const fit = Math.min(1, room / sizes.reduce(function (a, s) { return a + s[0] + gap; }, -gap));
+    const total = sizes.reduce(function (a, s) { return a + s[0] + gap; }, -gap) * fit;
     let x = -total / 2;
     list.forEach(function (g, i) {
-        const w = sizes[i][0], h = sizes[i][1], d = 0.014;
-        const front = g.cover ? imageMaterial(g.cover, frontCover(g, kind)) : lambert({ map: frontCover(g, kind) });
+        const w = sizes[i][0] * fit, h = sizes[i][1] * fit, d = 0.014;
+        const front = g.cover ? imageMaterial(g.cover, frontCover(g, kind), h / w) : lambert({ map: frontCover(g, kind) });
         const edge = lambert({ color: shade(g.color, -0.1) });
-        const mats = [edge, lambert({ map: spine(g, 24, 280, 14) }), edge, edge, front, lambert({ map: backCover(g) })];
+        const mats = [edge, lambert({ map: spine(g, 24, 280, 14) }), edge, edge, front, lambert({ map: backCover(g, h / w) })];
         const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mats);
         m.rotation.x = -0.12;
         m.position.set(x + w / 2, shelfFloor[shelf] + h / 2 * Math.cos(0.12), FRONT - 0.05 - h / 2 * Math.sin(0.12));
-        x += w + gap;
+        x += w + gap * fit;
         addItem(m, g, kind, i);
     });
 }
